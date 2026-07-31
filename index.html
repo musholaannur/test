@@ -223,17 +223,28 @@
             #mutasi-list .bg-blue-600 div:last-child { font-size: 18px !important; }
         }
 
-        /* STYLES KHUSUS PRINT & PDF A4 (IDENTIK DENGAN WARNA APLIKASI) */
+        /* STYLES KHUSUS PRINT & PDF A4 KANVAS PRESISI 300 DPI */
         #pdf-export-area {
             display: none;
-            width: 790px;
+            width: 794px; /* Lebar piksel standar A4 pada rasio cetak */
             background-color: #f4f7f5;
             color: #1e293b;
-            padding: 16px;
+            padding: 20px;
+            box-sizing: border-box;
         }
-        .pdf-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-        .pdf-table th { background-color: #f8fafc; color: #64748b; padding: 8px 6px; font-size: 11px; border-bottom: 1px solid #e2e8f0; text-transform: uppercase; }
-        .pdf-table td { padding: 9px 6px; font-size: 11px; border-bottom: 1px solid #f1f5f9; color: #0f172a; }
+        .pdf-table { width: 100%; border-collapse: collapse; margin-top: 8px; table-layout: fixed; }
+        .pdf-table th { background-color: #f8fafc; color: #475569; padding: 8px 6px; font-size: 11px; border-bottom: 2px solid #cbd5e1; text-transform: uppercase; }
+        .pdf-table td { padding: 8px 6px; font-size: 10.5px; border-bottom: 1px solid #e2e8f0; color: #0f172a; word-wrap: break-word; }
+        
+        /* ATURAN PEMOTONGAN HALAMAN A4 RAPI */
+        .pdf-page-break {
+            page-break-after: always !important;
+            break-after: page !important;
+        }
+        .pdf-keep-together {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
     </style>
 </head>
 <body class="min-h-screen py-4 px-3 md:py-6 md:px-8 flex flex-col items-center justify-start">
@@ -372,44 +383,44 @@
         </div>
     </div>
 
-    <!-- AREA KHUSUS CETAK PDF DENGAN WARNA WARNI 100% PERSIS APLIKASI UTAMA -->
+    <!-- AREA KHUSUS CETAK PDF DENGAN WARNA 100% PERSIS APLIKASI & PEMOTONGAN RAPI -->
     <div id="pdf-export-area">
-        <!-- HEADER HIJAU TUA MUSHOLA -->
-        <div style="background-color: #115e3b; color: white; text-align: center; padding: 20px 16px; border-radius: 20px; margin-bottom: 12px;">
+        <!-- HEADER HIJAU MUSHOLA -->
+        <div class="pdf-keep-together" style="background-color: #115e3b; color: white; text-align: center; padding: 18px 14px; border-radius: 18px; margin-bottom: 12px;">
             <h1 style="color: #ffffff; margin: 0; font-size: 18pt; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">MUSHOLA WAKAF AN-NUR</h1>
-            <p style="color: #00FF66; margin: 6px 0 0 0; font-size: 9pt; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;">LAPORAN INFAQ DIGITAL SYSTEM</p>
-            <div style="color: #ffffff; font-size: 8pt; font-weight: 500; margin-top: 6px; opacity: 0.9;">Untuk Transparansi Keuangan Infaq Mushola Wakaf An-Nur | musholaannur.vercel.app</div>
+            <p style="color: #00FF66; margin: 4px 0 0 0; font-size: 9pt; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;">LAPORAN INFAQ DIGITAL SYSTEM</p>
+            <div style="color: #ffffff; font-size: 8pt; font-weight: 500; margin-top: 4px; opacity: 0.9;">Untuk Transparansi Keuangan Infaq Mushola Wakaf An-Nur | musholaannur.vercel.app</div>
         </div>
 
         <!-- BANNER BIRU SALDO SAAT INI -->
-        <div style="background-color: #2563eb; color: white; text-align: center; padding: 22px 16px; border-radius: 20px; margin-bottom: 12px; position: relative;">
-            <div style="font-size: 8pt; color: #00FF66; text-transform: uppercase; font-weight: 900; letter-spacing: 2px; margin-bottom: 4px;">● SYSTEM ONLINE</div>
+        <div class="pdf-keep-together" style="background-color: #2563eb; color: white; text-align: center; padding: 20px 14px; border-radius: 18px; margin-bottom: 12px;">
+            <div style="font-size: 8pt; color: #00FF66; text-transform: uppercase; font-weight: 900; letter-spacing: 2px; margin-bottom: 2px;">● SYSTEM ONLINE</div>
             <div style="font-size: 9pt; color: #dbeafe; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">SALDO INFAQ SAAT INI</div>
-            <div id="pdf-saldo-saat-ini" style="font-size: 32pt; font-weight: 900; color: #ffffff; margin-top: 2px; letter-spacing: -1px;">Rp 0</div>
+            <div id="pdf-saldo-saat-ini" style="font-size: 30pt; font-weight: 900; color: #ffffff; margin-top: 2px; letter-spacing: -1px;">Rp 0</div>
         </div>
 
         <!-- CARD RINGKASAN PEMASUKAN & PENGELUARAN -->
-        <table style="width: 100%; margin-bottom: 12px; border-collapse: separate; border-spacing: 10px 0; margin-left: -10px; width: calc(100% + 20px);">
+        <table class="pdf-keep-together" style="width: 100%; margin-bottom: 12px; border-collapse: separate; border-spacing: 10px 0; margin-left: -10px; width: calc(100% + 20px);">
             <tr>
-                <td style="width: 50%; background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #10b981; border-radius: 14px; padding: 12px 14px;">
+                <td style="width: 50%; background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #10b981; border-radius: 14px; padding: 10px 12px;">
                     <div style="font-size: 8pt; color: #64748b; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">Total Pemasukan</div>
-                    <div id="pdf-pemasukan" style="font-size: 16pt; font-weight: 900; color: #10b981; margin-top: 2px;">Rp 0</div>
+                    <div id="pdf-pemasukan" style="font-size: 15pt; font-weight: 900; color: #10b981; margin-top: 2px;">Rp 0</div>
                 </td>
-                <td style="width: 50%; background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #ef4444; border-radius: 14px; padding: 12px 14px;">
+                <td style="width: 50%; background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #ef4444; border-radius: 14px; padding: 10px 12px;">
                     <div style="font-size: 8pt; color: #64748b; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">Total Pengeluaran</div>
-                    <div id="pdf-pengeluaran" style="font-size: 16pt; font-weight: 900; color: #ef4444; margin-top: 2px;">Rp 0</div>
+                    <div id="pdf-pengeluaran" style="font-size: 15pt; font-weight: 900; color: #ef4444; margin-top: 2px;">Rp 0</div>
                 </td>
             </tr>
         </table>
 
         <!-- TABEL MUTASI TRANSAKSI -->
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 12px;">
             <div style="color: #065f46; font-size: 10pt; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #115e3b; padding-bottom: 6px; margin-bottom: 8px; letter-spacing: 1px;">LAPORAN MUTASI INFAQ</div>
             <table class="pdf-table">
                 <thead>
                     <tr>
-                        <th style="width: 15%; text-align: left;">Tanggal</th>
-                        <th style="width: 40%; text-align: left;">Keterangan</th>
+                        <th style="width: 16%; text-align: left;">Tanggal</th>
+                        <th style="width: 39%; text-align: left;">Keterangan</th>
                         <th style="width: 15%; text-align: right;">Masuk</th>
                         <th style="width: 15%; text-align: right;">Keluar</th>
                         <th style="width: 15%; text-align: right;">Saldo</th>
@@ -420,7 +431,7 @@
             </table>
         </div>
 
-        <div style="text-align: center; margin-top: 16px; font-size: 8pt; color: #94a3b8; font-weight: 900; letter-spacing: 2px;">
+        <div style="text-align: center; margin-top: 14px; font-size: 8pt; color: #94a3b8; font-weight: 900; letter-spacing: 2px;" class="pdf-keep-together">
             POWERED BY : MBS ID
         </div>
     </div>
@@ -433,14 +444,14 @@
                 </svg>
             </div>
             <h3 class="text-[#115e3b] text-sm uppercase mb-1 font-black break-words">Unduh Laporan PDF</h3>
-            <p class="text-[10px] text-slate-500 mb-5 uppercase tracking-wide break-words leading-relaxed font-bold">PDF Format A4 Sempurna 300 DPI Tajam Anti Pecah</p>
+            <p class="text-[10px] text-slate-500 mb-5 uppercase tracking-wide break-words leading-relaxed font-bold">Format A4 Sempurna (Pindah Lembar Rapi Pada Akumulasi Saldo)</p>
             
             <div class="flex flex-col gap-2">
                 <button id="download-pdf-btn" onclick="exportToPDF()" class="w-full bg-gradient-to-r from-[#115e3b] to-[#106b3c] hover:from-[#0b3f27] hover:to-[#115e3b] text-white py-3 rounded-xl text-xs uppercase tracking-wider font-black shadow-md transition duration-200 flex items-center justify-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#00FF66]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    <span>UNDUH PDF (300 DPI TAJAM)</span>
+                    <span>UNDUH PDF (PRESISI A4)</span>
                 </button>
                 <button type="button" onclick="closePdfModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs uppercase tracking-wider font-black transition">Batal</button>
             </div>
@@ -630,11 +641,11 @@
         function openPdfModal() { document.getElementById("pdf-modal").classList.remove("hidden"); }
         function closePdfModal() { document.getElementById("pdf-modal").classList.add("hidden"); }
 
-        /* FUNGSI EKSPOR PDF 300 DPI - WARNA WARNI 100% PERSIS APLIKASI */
+        /* FUNGSI EKSPOR PDF PRESISI A4 & PINDAH LEMBAR HANYA PADA BARIS SALDO AKUMULASI BULANAN */
         function exportToPDF() {
             const btn = document.getElementById("download-pdf-btn");
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<span class="animate-pulse">MEMPROSES PDF 300 DPI...</span>`;
+            btn.innerHTML = `<span class="animate-pulse">MEMPROSES PDF PRESISI A4...</span>`;
             btn.disabled = true;
 
             const todayStr = new Date().toISOString().split('T')[0];
@@ -658,8 +669,9 @@
 
                 const bgRow = index % 2 === 0 ? 'background-color: #ffffff;' : 'background-color: #f8fafc;';
 
+                // Baris Transaksi Biasa
                 tableRowsHtml += `
-                    <tr style="${bgRow}">
+                    <tr style="${bgRow}" class="pdf-keep-together">
                         <td style="text-align: left; font-weight: 700; color: #475569;">${formatToDMYString(item.tanggal)}</td>
                         <td style="text-align: left; font-weight: 900; color: #0f172a; text-transform: uppercase;">${item.keterangan}</td>
                         <td style="text-align: right; font-weight: 900; color: #10b981;">${masuk > 0 ? formatRupiah(masuk) : "-"}</td>
@@ -679,9 +691,10 @@
                     }
                 }
 
+                // Baris Akumulasi Saldo Bulanan (Diberi penanda agar pindah lembar dengan mulus tepat setelah baris ini)
                 if (isEndOfMonth) {
                     tableRowsHtml += `
-                        <tr style="background-color: #2563eb; color: white; font-weight: 900;">
+                        <tr style="background-color: #2563eb; color: white; font-weight: 900;" class="pdf-page-break pdf-keep-together">
                             <td colspan="4" style="text-align: left; padding: 7px 10px; font-size: 10px; letter-spacing: 1px; color: #ffffff;">AKUMULASI SALDO BULAN ${getNamaBulan(item.tanggal)}</td>
                             <td style="text-align: right; padding: 7px 10px; font-size: 11px; color: #ffffff;">${formatRupiah(runningSaldo)}</td>
                         </tr>
@@ -704,21 +717,21 @@
 
             exportArea.style.display = "block";
 
-            // Konfigurasi Scale 3 (Sama dengan resolusi 300 DPI cetak A4 ultra tajam & anti pecah)
+            // Konfigurasi Pindah Halaman Otomatis Hanya Pada Class ".pdf-page-break"
             const opt = {
-                margin:       [5, 5, 5, 5],
+                margin:       [6, 6, 6, 6],
                 filename:     `Laporan_Infaq_An_Nur_${todayStr}.pdf`,
                 image:        { type: 'jpeg', quality: 1.0 },
                 html2canvas:  { 
-                    scale: 3.125, // Scale ~3.125 pada canvas A4 menghasilkan resolusi setara 300 DPI cetak presisi
+                    scale: 3, 
                     useCORS: true, 
                     logging: false,
                     scrollX: 0,
                     scrollY: 0,
-                    windowWidth: 790
+                    windowWidth: 794
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+                pagebreak:    { mode: ['css', 'legacy'], after: '.pdf-page-break', avoid: '.pdf-keep-together' }
             };
 
             html2pdf().set(opt).from(exportArea).save().then(() => {
