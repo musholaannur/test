@@ -576,6 +576,7 @@
         function openPdfModal() { document.getElementById("pdf-modal").classList.remove("hidden"); }
         function closePdfModal() { document.getElementById("pdf-modal").classList.add("hidden"); }
 
+        /* FUNGSI EKSPOR PDF FIX (BEBAS BLANK PUTIH) */
         function exportToPDF() {
             const btn = document.getElementById("download-pdf-btn");
             const originalText = btn.innerHTML;
@@ -638,14 +639,17 @@
                 `;
             }
 
+            // Container Render menggunakan position: fixed & z-index minus agar terbaca sempurna oleh html2canvas
             const renderWrapper = document.createElement('div');
-            renderWrapper.style.position = 'absolute';
-            renderWrapper.style.left = '-9999px';
+            renderWrapper.style.position = 'fixed';
             renderWrapper.style.top = '0';
+            renderWrapper.style.left = '0';
+            renderWrapper.style.zIndex = '-9999';
             renderWrapper.style.width = '790px';
+            renderWrapper.style.backgroundColor = '#ffffff';
 
             renderWrapper.innerHTML = `
-                <div class="pdf-render-box">
+                <div class="pdf-render-box" style="padding: 12px; background: #ffffff;">
                     <div style="background: linear-gradient(135deg, #0d4a2a, #106b3c, #1da25a); color: white; text-align: center; padding: 16px; border-radius: 16px; margin-bottom: 12px;">
                         <h1 style="color: #00FF66; margin: 0; font-size: 16pt; text-transform: uppercase; font-weight: 900;">MUSHOLA WAKAF AN-NUR</h1>
                         <p style="margin: 4px 0 0 0; font-size: 10pt; font-weight: bold;">LAPORAN INFAQ DIGITAL SYSTEM</p>
@@ -700,13 +704,20 @@
             const opt = {
                 margin:       [4, 4, 4, 4],
                 filename:     `Laporan_Infaq_An_Nur_${todayStr}.pdf`,
-                image:        { type: 'jpeg', quality: 1.0 },
-                html2canvas:  { scale: 3, useCORS: true, logging: false, letterRendering: true, width: 790 },
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true, 
+                    logging: false,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: 800
+                },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            html2pdf().set(opt).from(renderWrapper.firstElementChild).save().then(() => {
+            html2pdf().set(opt).from(renderWrapper).save().then(() => {
                 document.body.removeChild(renderWrapper);
                 btn.innerHTML = originalText;
                 btn.disabled = false;
