@@ -226,24 +226,24 @@
         /* STYLES KHUSUS PRINT & PDF A4 KANVAS PRESISI 300 DPI */
         #pdf-export-area {
             display: none;
-            width: 794px;
+            width: 760px;
             background-color: #f4f7f5;
             color: #1e293b;
-            padding: 20px;
+            padding: 16px;
             box-sizing: border-box;
+            margin: 0 auto;
         }
-        .pdf-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 0px; }
-        .pdf-table th { background-color: #f8fafc; color: #475569; padding: 8px 6px; font-size: 11px; border-bottom: 2px solid #cbd5e1; text-transform: uppercase; }
-        .pdf-table td { padding: 8px 6px; font-size: 10.5px; border-bottom: 1px solid #e2e8f0; color: #0f172a; word-wrap: break-word; }
+        .pdf-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        .pdf-table th { background-color: #f8fafc; color: #475569; padding: 8px 8px; font-size: 11px; border-bottom: 2px solid #cbd5e1; text-transform: uppercase; }
+        .pdf-table td { padding: 8px 8px; font-size: 10.5px; border-bottom: 1px solid #e2e8f0; color: #0f172a; word-wrap: break-word; }
         
         .pdf-keep-together {
             page-break-inside: avoid !important;
             break-inside: avoid !important;
         }
-        .month-block {
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
-            margin-bottom: 6px;
+        .pdf-page-break {
+            page-break-after: always !important;
+            break-after: page !important;
         }
     </style>
 </head>
@@ -383,7 +383,7 @@
         </div>
     </div>
 
-    <!-- AREA KHUSUS CETAK PDF DENGAN KANVAS PRESISI A4 -->
+    <!-- AREA KHUSUS CETAK PDF DENGAN TABEL TUNGGAL UTUH & PRESISI -->
     <div id="pdf-export-area">
         <!-- HEADER HIJAU MUSHOLA -->
         <div class="pdf-keep-together" style="background-color: #115e3b; color: white; text-align: center; padding: 18px 14px; border-radius: 18px; margin-bottom: 12px;">
@@ -413,10 +413,22 @@
             </tr>
         </table>
 
-        <!-- TABEL MUTASI TRANSAKSI (CONTAINER DYNAMIC MONTHLY BLOCKS) -->
+        <!-- TABEL MUTASI TRANSAKSI TUNGGAL LENGKAP -->
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 12px;">
             <div style="color: #065f46; font-size: 10pt; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #115e3b; padding-bottom: 6px; margin-bottom: 8px; letter-spacing: 1px;">LAPORAN MUTASI INFAQ</div>
-            <div id="pdf-blocks-container"></div>
+            <table class="pdf-table">
+                <thead>
+                    <tr>
+                        <th style="width: 15%; text-align: left; padding-left: 10px;">Tanggal</th>
+                        <th style="width: 40%; text-align: left;">Keterangan</th>
+                        <th style="width: 15%; text-align: right;">Masuk</th>
+                        <th style="width: 15%; text-align: right;">Keluar</th>
+                        <th style="width: 15%; text-align: right; padding-right: 10px;">Saldo</th>
+                    </tr>
+                </thead>
+                <tbody id="pdf-table-body">
+                </tbody>
+            </table>
         </div>
 
         <div style="text-align: center; margin-top: 14px; font-size: 8pt; color: #94a3b8; font-weight: 900; letter-spacing: 2px;" class="pdf-keep-together">
@@ -432,14 +444,14 @@
                 </svg>
             </div>
             <h3 class="text-[#115e3b] text-sm uppercase mb-1 font-black break-words">Unduh Laporan PDF</h3>
-            <p class="text-[10px] text-slate-500 mb-5 uppercase tracking-wide break-words leading-relaxed font-bold">Format A4 Sempurna (Pindah Lembar Rapi & Tanggal Utuh)</p>
+            <p class="text-[10px] text-slate-500 mb-5 uppercase tracking-wide break-words leading-relaxed font-bold">Format A4 Sempurna (Kolom Tanggal Lengkap & Rapi)</p>
             
             <div class="flex flex-col gap-2">
                 <button id="download-pdf-btn" onclick="exportToPDF()" class="w-full bg-gradient-to-r from-[#115e3b] to-[#106b3c] hover:from-[#0b3f27] hover:to-[#115e3b] text-white py-3 rounded-xl text-xs uppercase tracking-wider font-black shadow-md transition duration-200 flex items-center justify-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#00FF66]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    <span>UNDUH PDF (300 DPI TAJAM)</span>
+                    <span>UNDUH PDF (PRESISI A4)</span>
                 </button>
                 <button type="button" onclick="closePdfModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs uppercase tracking-wider font-black transition">Batal</button>
             </div>
@@ -629,7 +641,7 @@
         function openPdfModal() { document.getElementById("pdf-modal").classList.remove("hidden"); }
         function closePdfModal() { document.getElementById("pdf-modal").classList.add("hidden"); }
 
-        /* FUNGSI EKSPOR PDF REVISI PRESISI A4 & KOLOM TANGGAL UTUH */
+        /* FUNGSI EKSPOR PDF REVISI PRESISI A4 & HANYA 1 TABEL UTUH MEMANJANG */
         function exportToPDF() {
             const btn = document.getElementById("download-pdf-btn");
             const originalText = btn.innerHTML;
@@ -638,108 +650,74 @@
 
             const todayStr = new Date().toISOString().split('T')[0];
             const exportArea = document.getElementById("pdf-export-area");
-            const blocksContainer = document.getElementById("pdf-blocks-container");
+            const tbody = document.getElementById("pdf-table-body");
 
             let runningSaldo = 0;
             let totalMasuk = 0;
             let totalKeluar = 0;
 
+            let tableRowsHtml = "";
             let tempDb = [...currentDatabase];
             tempDb.sort((a, b) => parseDMYToDate(a.tanggal) - parseDMYToDate(b.tanggal));
 
-            // Kelompokkan Transaksi berdasarkan Bulan
-            let monthlyGroups = [];
-            let currentGroup = null;
-
-            tempDb.forEach((item) => {
+            tempDb.forEach((item, index) => {
                 const masuk = parseInt(item.masuk) || 0;
                 const keluar = parseInt(item.keluar) || 0;
                 totalMasuk += masuk;
                 totalKeluar += keluar;
                 runningSaldo += (masuk - keluar);
 
-                const itemMonthKey = getNamaBulan(item.tanggal);
+                const bgRow = index % 2 === 0 ? 'background-color: #ffffff;' : 'background-color: #f8fafc;';
 
-                if (!currentGroup || currentGroup.monthKey !== itemMonthKey) {
-                    currentGroup = {
-                        monthKey: itemMonthKey,
-                        items: []
-                    };
-                    monthlyGroups.push(currentGroup);
+                // Baris Transaksi Biasa
+                tableRowsHtml += `
+                    <tr style="${bgRow}" class="pdf-keep-together">
+                        <td style="text-align: left; font-weight: 700; color: #475569; white-space: nowrap; padding-left: 10px;">${formatToDMYString(item.tanggal)}</td>
+                        <td style="text-align: left; font-weight: 900; color: #0f172a; text-transform: uppercase;">${item.keterangan}</td>
+                        <td style="text-align: right; font-weight: 900; color: #10b981;">${masuk > 0 ? formatRupiah(masuk) : "-"}</td>
+                        <td style="text-align: right; font-weight: 900; color: #ef4444;">${keluar > 0 ? "-" + formatRupiah(keluar) : "-"}</td>
+                        <td style="text-align: right; font-weight: 900; color: #2563eb; padding-right: 10px;">${formatRupiah(runningSaldo)}</td>
+                    </tr>
+                `;
+
+                let isEndOfMonth = false;
+                if (index === tempDb.length - 1) {
+                    isEndOfMonth = true;
+                } else {
+                    const currentTxDate = parseDMYToDate(item.tanggal);
+                    const nextTxDate = parseDMYToDate(tempDb[index + 1].tanggal);
+                    if (currentTxDate.getMonth() !== nextTxDate.getMonth() || currentTxDate.getFullYear() !== nextTxDate.getFullYear()) {
+                        isEndOfMonth = true;
+                    }
                 }
 
-                currentGroup.items.push({
-                    ...item,
-                    currentSaldo: runningSaldo
-                });
+                // Baris Akumulasi Saldo Bulanan (Tumpuan Pindah Lembar)
+                if (isEndOfMonth) {
+                    tableRowsHtml += `
+                        <tr style="background-color: #2563eb; color: white; font-weight: 900;" class="pdf-page-break pdf-keep-together">
+                            <td colspan="4" style="text-align: left; padding: 7px 10px; font-size: 10px; letter-spacing: 1px; color: #ffffff;">AKUMULASI SALDO BULAN ${getNamaBulan(item.tanggal)}</td>
+                            <td style="text-align: right; padding: 7px 10px; font-size: 11px; color: #ffffff;">${formatRupiah(runningSaldo)}</td>
+                        </tr>
+                    `;
+                }
             });
 
-            // Generate HTML per Blok Bulanan
-            let blocksHtml = "";
-
-            if (monthlyGroups.length === 0) {
-                blocksHtml = `
-                    <table class="pdf-table">
-                        <tr>
-                            <td style="text-align: center; color: #64748b; padding: 20px;">Belum ada data transaksi infaq.</td>
-                        </tr>
-                    </table>
+            if (tempDb.length === 0) {
+                tableRowsHtml = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #64748b; padding: 20px;">Belum ada data transaksi infaq.</td>
+                    </tr>
                 `;
-            } else {
-                monthlyGroups.forEach((group) => {
-                    let rowsHtml = "";
-                    let lastGroupSaldo = group.items[group.items.length - 1].currentSaldo;
-
-                    group.items.forEach((item, idx) => {
-                        const masuk = parseInt(item.masuk) || 0;
-                        const keluar = parseInt(item.keluar) || 0;
-                        const bgRow = idx % 2 === 0 ? 'background-color: #ffffff;' : 'background-color: #f8fafc;';
-
-                        rowsHtml += `
-                            <tr style="${bgRow}">
-                                <td style="width: 18%; text-align: left; font-weight: 700; color: #475569; white-space: nowrap;">${formatToDMYString(item.tanggal)}</td>
-                                <td style="width: 37%; text-align: left; font-weight: 900; color: #0f172a; text-transform: uppercase;">${item.keterangan}</td>
-                                <td style="width: 15%; text-align: right; font-weight: 900; color: #10b981;">${masuk > 0 ? formatRupiah(masuk) : "-"}</td>
-                                <td style="width: 15%; text-align: right; font-weight: 900; color: #ef4444;">${keluar > 0 ? "-" + formatRupiah(keluar) : "-"}</td>
-                                <td style="width: 15%; text-align: right; font-weight: 900; color: #2563eb;">${formatRupiah(item.currentSaldo)}</td>
-                            </tr>
-                        `;
-                    });
-
-                    // Setiap bulan dibungkus sebagai 1 Blok Utuh
-                    blocksHtml += `
-                        <div class="month-block">
-                            <table class="pdf-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 18%; text-align: left;">Tanggal</th>
-                                        <th style="width: 37%; text-align: left;">Keterangan</th>
-                                        <th style="width: 15%; text-align: right;">Masuk</th>
-                                        <th style="width: 15%; text-align: right;">Keluar</th>
-                                        <th style="width: 15%; text-align: right;">Saldo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${rowsHtml}
-                                    <tr style="background-color: #2563eb; color: white; font-weight: 900;">
-                                        <td colspan="4" style="text-align: left; padding: 7px 10px; font-size: 10px; letter-spacing: 1px; color: #ffffff;">AKUMULASI SALDO BULAN ${group.monthKey}</td>
-                                        <td style="text-align: right; padding: 7px 10px; font-size: 11px; color: #ffffff;">${formatRupiah(lastGroupSaldo)}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    `;
-                });
             }
 
             document.getElementById("pdf-saldo-saat-ini").innerText = formatRupiah(runningSaldo);
             document.getElementById("pdf-pemasukan").innerText = formatRupiah(totalMasuk);
             document.getElementById("pdf-pengeluaran").innerText = formatRupiah(totalKeluar);
-            blocksContainer.innerHTML = blocksHtml;
+            tbody.innerHTML = tableRowsHtml;
 
             exportArea.style.display = "block";
 
-            // Konfigurasi Pindah Halaman Otomatis Ketika 3-4 Blok Memenuhi 1 Lembar A4
+            // Konfigurasi Pindah Lembar Rapi Pada Kelas ".pdf-page-break"
             const opt = {
                 margin:       [6, 6, 6, 6],
                 filename:     `Laporan_Infaq_An_Nur_${todayStr}.pdf`,
@@ -750,10 +728,10 @@
                     logging: false,
                     scrollX: 0,
                     scrollY: 0,
-                    windowWidth: 794
+                    windowWidth: 760
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['css', 'legacy'], avoid: ['.month-block', '.pdf-keep-together'] }
+                pagebreak:    { mode: ['css', 'legacy'], after: '.pdf-page-break', avoid: '.pdf-keep-together' }
             };
 
             html2pdf().set(opt).from(exportArea).save().then(() => {
