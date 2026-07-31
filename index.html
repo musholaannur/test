@@ -6,10 +6,9 @@
     <title>RT 08 RW 04 - Laporan Kas Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Script HTML2PDF untuk Screenshot & Download PDF Otomatis -->
+    <!-- Pustaka html2pdf untuk ekspor PDF A4 UHD -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        /* Memaksa seluruh teks di dalam aplikasi menggunakan ketebalan bold tebal/tegas */
         * {
             font-weight: 900 !important;
         }
@@ -33,7 +32,7 @@
             background: #0b3f27;
         }
         
-        /* Efek Kedip Radar Sonar Khas Aplikasi Sistem */
+        /* Efek Radar */
         .radar-pulse {
             position: relative;
             width: 8px;
@@ -55,18 +54,11 @@
             animation: radar-scan 1.8s ease-out infinite;
         }
         @keyframes radar-scan {
-            0% {
-                transform: scale(0.4);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.4);
-                opacity: 0;
-                box-shadow: 0 0 12px #00FF66;
-            }
+            0% { transform: scale(0.4); opacity: 1; }
+            100% { transform: scale(1.4); opacity: 0; box-shadow: 0 0 12px #00FF66; }
         }
         
-        /* --- EFEK SALJU CSS --- */
+        /* Salju */
         .snowflake {
             color: rgba(255, 255, 255, 0.5);
             font-size: 1.3em;
@@ -81,20 +73,37 @@
             animation-timing-function: linear, ease-in-out;
             animation-iteration-count: infinite, infinite;
         }
-        @keyframes snowflakes-fall {
-            0% {
-                top: -10%;
-            }
-            100% {
-                top: 105%;
-            }
+        @keyframes snowflakes-fall { 0% { top: -10%; } 100% { top: 105%; } }
+        @keyframes snowflakes-shake { 0%, 100% { transform: translateX(0) rotate(0deg); } 50% { transform: translateX(60px) rotate(180deg); } }
+
+        /* MENCEGAH PEMOTONGAN DATA / SALDO DI TENGAH HALAMAN A4 */
+        .page-break-inside-avoid {
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
         }
-        @keyframes snowflakes-shake {
-            0%, 100% {
-                transform: translateX(0) rotate(0deg);
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
             }
-            50% {
-                transform: translateX(60px) rotate(180deg);
+            body {
+                background-color: #ffffff !important;
+                padding: 0 !important;
+            }
+            #snow-container, [data-html2canvas-ignore="true"], #pdf-modal, #pin-modal, #transaction-modal {
+                display: none !important;
+            }
+            #report-container {
+                max-width: 100% !important;
+                width: 100% !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                background: transparent !important;
+            }
+            .mutasi-row, .rekap-row-block {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
             }
         }
     </style>
@@ -103,10 +112,9 @@
 
     <div id="snow-container"></div>
 
-    <!-- Wrapper Konten Utama yang Di-capture oleh PDF -->
     <div id="report-container" class="w-full max-w-6xl flex flex-col gap-4 relative z-10 bg-[#f4f7f5] p-2 rounded-2xl">
         
-        <div class="bg-gradient-to-r from-[#0d4a2a] via-[#106b3c] to-[#1da25a] text-center py-5 md:py-6 rounded-[28px] shadow-md px-4 flex flex-col gap-1 justify-center items-center overflow-hidden border border-emerald-900/20">
+        <div class="bg-gradient-to-r from-[#0d4a2a] via-[#106b3c] to-[#1da25a] text-center py-5 md:py-6 rounded-[28px] shadow-md px-4 flex flex-col gap-1 justify-center items-center overflow-hidden border border-emerald-900/20 page-break-inside-avoid">
             <h1 class="text-[#00FF66] text-[3.8vw] md:text-[2.2vw] tracking-wider uppercase font-black block w-full text-center whitespace-nowrap px-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 LAPORAN KAS RT 08 RW 04, BAKALAN LOR
             </h1>
@@ -118,9 +126,9 @@
             </div>
         </div>
 
-        <div class="bg-[#115e3b] text-white text-center py-7 md:py-10 rounded-3xl shadow-md relative overflow-hidden flex items-center justify-center px-4 md:px-10">
+        <div class="bg-[#115e3b] text-white text-center py-7 md:py-10 rounded-3xl shadow-md relative overflow-hidden flex items-center justify-center px-4 md:px-10 page-break-inside-avoid">
             <div class="flex-1 flex flex-col items-center justify-center px-2">
-                <div class="flex items-center justify-center gap-2 mb-2">
+                <div class="flex items-center justify-center gap-2 mb-2" data-html2canvas-ignore="true">
                     <div class="radar-pulse"></div>
                     <p class="text-[9px] md:text-[10px] text-[#00FF66] tracking-widest uppercase style-glow" style="text-shadow: 0 0 6px #00FF66, 0 0 12px rgba(0,255,102,0.4);">
                         SYSTEM ONLINE
@@ -131,7 +139,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-2 gap-3 page-break-inside-avoid">
             <div class="bg-white border border-slate-200/80 p-3 md:p-4 rounded-2xl shadow-sm relative overflow-hidden">
                 <div class="absolute top-0 left-0 bottom-0 w-[4px] bg-[#10b981]"></div>
                 <p class="text-[9px] md:text-xs text-slate-500 uppercase tracking-wider mb-0.5 break-words">Total Pemasukan</p>
@@ -154,10 +162,10 @@
         <div class="bg-white border border-slate-200 rounded-2xl p-3 md:p-6 shadow-sm overflow-hidden">
             <div class="flex justify-between items-center mb-4 w-full gap-2">
                 <h2 class="text-emerald-800 text-xs md:text-base tracking-wide uppercase border-b-2 border-[#115e3b] pb-0.5 font-black break-words">LAPORAN MUTASI KAS RT 08</h2>
-                <span id="loading-status" class="text-[9px] md:text-xs text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 shrink-0">Sinkron...</span>
+                <span id="loading-status" class="text-[9px] md:text-xs text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 shrink-0" data-html2canvas-ignore="true">Sinkron...</span>
             </div>
             
-            <div class="hidden md:grid grid-cols-12 text-xs text-slate-700 uppercase border-b border-slate-200 pb-2 mb-2 tracking-wider bg-slate-100 p-2 rounded-lg text-center w-full">
+            <div class="hidden md:grid grid-cols-12 text-xs text-slate-700 uppercase border-b border-slate-200 pb-2 mb-2 tracking-wider bg-slate-100 p-2 rounded-lg text-center w-full page-break-inside-avoid">
                 <div class="col-span-1 text-left pl-1 border-r border-slate-200 shrink-0">Tanggal</div>
                 <div class="col-span-4 text-left px-4 border-r border-slate-200 min-w-[120px]">Keterangan</div>
                 <div class="col-span-2 text-right pr-4 border-r border-slate-200 shrink-0">Masuk</div>
@@ -169,21 +177,42 @@
             <div id="mutasi-list" class="flex flex-col gap-2 md:gap-1 text-xs md:text-sm w-full"></div>
         </div>
 
-        <!-- FOOTER & TOMBOL DOWNLOAD PDF STREAMING SCREENSHOT -->
-        <div class="text-center py-2 flex flex-col items-center gap-3">
-            <p class="text-[9px] md:text-xs tracking-widest text-slate-400 uppercase break-words">POWERED BY : MBS ID</p>
-            
-            <button id="download-pdf-btn" onclick="exportToPDF()" class="bg-gradient-to-r from-[#115e3b] to-[#106b3c] hover:from-[#0b3f27] hover:to-[#115e3b] text-white font-black py-2.5 px-5 rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2 text-xs md:text-sm uppercase tracking-wider">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#00FF66]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <!-- FOOTER: MBS ID BISA DI-KLIK UNTUK MEMBUKA POPUP DOWNLOAD PDF -->
+        <div class="text-center py-2 flex flex-col items-center justify-center page-break-inside-avoid">
+            <button onclick="openPdfModal()" class="text-[9px] md:text-xs tracking-widest text-slate-400 hover:text-emerald-700 active:scale-95 transition-all duration-200 uppercase break-words cursor-pointer select-none font-black flex items-center justify-center gap-1 group py-1 px-3 rounded-lg hover:bg-emerald-50/50">
+                <span>POWERED BY : MBS ID</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-0 group-hover:opacity-100 text-emerald-600 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
-                <span>DOWNLOAD LAPORAN PDF (TERBARU)</span>
             </button>
         </div>
     </div>
 
-    <!-- MODAL INPUT TRANSAKSI -->
-    <div id="transaction-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <!-- POP-UP MODAL TERSEMBUNYI UNTUK DOWNLOAD PDF -->
+    <div id="pdf-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn" data-html2canvas-ignore="true">
+        <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xs p-5 shadow-2xl relative text-slate-800 text-center">
+            <div class="w-12 h-12 rounded-full bg-emerald-100 text-[#115e3b] flex items-center justify-center mx-auto mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <h3 class="text-[#115e3b] text-sm uppercase mb-1 font-black break-words">Unduh Laporan PDF</h3>
+            <p class="text-[10px] text-slate-500 mb-5 uppercase tracking-wide break-words leading-relaxed font-bold">Format A4 High-Resolution dengan Pemotongan Halaman Otomatis Rapi</p>
+            
+            <div class="flex flex-col gap-2">
+                <button id="download-pdf-btn" onclick="exportToPDF()" class="w-full bg-gradient-to-r from-[#115e3b] to-[#106b3c] hover:from-[#0b3f27] hover:to-[#115e3b] text-white py-3 rounded-xl text-xs uppercase tracking-wider font-black shadow-md transition duration-200 flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#00FF66]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>DOWNLOAD PDF SEKARANG</span>
+                </button>
+                <button type="button" onclick="closePdfModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs uppercase tracking-wider font-black transition">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Input Transaction -->
+    <div id="transaction-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50" data-html2canvas-ignore="true">
         <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-sm p-5 shadow-xl relative text-slate-800">
             <h3 id="modal-title" class="text-[#115e3b] text-sm uppercase mb-4 break-words">Input Data Kas</h3>
             <form id="transaction-form" onsubmit="handleFormSubmit(event)">
@@ -220,8 +249,8 @@
         </div>
     </div>
 
-    <!-- MODAL PIN -->
-    <div id="pin-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
+    <!-- Modal PIN -->
+    <div id="pin-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn" data-html2canvas-ignore="true">
         <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xs p-5 shadow-2xl relative text-slate-800 text-center">
             <div class="w-12 h-12 rounded-full bg-emerald-50 text-[#115e3b] flex items-center justify-center mx-auto mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -311,6 +340,15 @@
             }
         }
 
+        /* FUNGSI CONTROL MODAL PDF TERSEMBUNYI */
+        function openPdfModal() {
+            document.getElementById("pdf-modal").classList.remove("hidden");
+        }
+
+        function closePdfModal() {
+            document.getElementById("pdf-modal").classList.add("hidden");
+        }
+
         function requestAccess(mode, index = null) {
             currentAccessSession.mode = mode;
             currentAccessSession.index = index;
@@ -377,7 +415,7 @@
                 
                 const baseBgRow = index % 2 === 0 ? 'bg-white' : 'bg-slate-50/70';
                 const rowContainer = document.createElement("div");
-                rowContainer.className = `flex flex-col md:grid md:grid-cols-12 md:items-center p-3 py-2 md:py-2 md:px-2 border border-slate-200 md:border-b md:border-x-0 md:border-t-0 rounded-xl md:rounded-none shadow-sm md:shadow-none hover:bg-emerald-50/40 transition gap-2 md:gap-0 ${baseBgRow} w-full overflow-hidden`;
+                rowContainer.className = `mutasi-row page-break-inside-avoid flex flex-col md:grid md:grid-cols-12 md:items-center p-3 py-2 md:py-2 md:px-2 border border-slate-200 md:border-b md:border-x-0 md:border-t-0 rounded-xl md:rounded-none shadow-sm md:shadow-none hover:bg-emerald-50/40 transition gap-2 md:gap-0 ${baseBgRow} w-full overflow-hidden`;
                 
                 let notaHtml = "";
                 if (item.nota && item.nota.trim() !== "") {
@@ -440,7 +478,7 @@
                 
                 if (isEndOfMonth) {
                     const rekapDiv = document.createElement("div");
-                    rekapDiv.className = "flex flex-col md:grid md:grid-cols-12 md:items-center py-2.5 px-3 my-2 bg-[#115e3b] text-white rounded-xl border border-emerald-800 shadow-sm text-[11px] md:text-xs tracking-wide uppercase w-full text-center gap-1 md:gap-0 overflow-hidden";
+                    rekapDiv.className = "rekap-row-block page-break-inside-avoid flex flex-col md:grid md:grid-cols-12 md:items-center py-2.5 px-3 my-2 bg-[#115e3b] text-white rounded-xl border border-emerald-800 shadow-sm text-[11px] md:text-xs tracking-wide uppercase w-full text-center gap-1 md:gap-0 overflow-hidden";
                     rekapDiv.innerHTML = `
                         <div class="md:contents flex flex-col items-center justify-center gap-1 w-full">
                             <div class="md:col-span-5 font-black normal-case md:px-4 text-center md:text-left break-words w-full">AKUMULASI SALDO BULAN ${getNamaBulan(item.tanggal)}</div>
@@ -459,11 +497,11 @@
             document.getElementById("total-pengeluaran").innerText = formatRupiah(totalKeluar);
         }
 
-        // FUNGSI SCREENSHOT & DOWNLOAD PDF LIVE
+        /* FUNGSI EKSPOR PDF ULTRA HIGH DEFINITION (A4 AUTOMATIC PAGE-BREAK) */
         function exportToPDF() {
             const btn = document.getElementById("download-pdf-btn");
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<span class="animate-pulse">MEMPROSES PDF...</span>`;
+            btn.innerHTML = `<span class="animate-pulse">MEMPROSES PDF UHD...</span>`;
             btn.disabled = true;
 
             const element = document.getElementById('report-container');
@@ -472,14 +510,25 @@
             const opt = {
                 margin:       [8, 8, 8, 8],
                 filename:     `Laporan_Kas_RT08_${todayStr}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                image:        { type: 'jpeg', quality: 1.0 },
+                html2canvas:  { 
+                    scale: 3,             // Skala 3x (High DPI Retina Quality) agar gambar tajam dan tidak pecah saat diunduh
+                    useCORS: true, 
+                    logging: false,
+                    letterRendering: true,
+                    windowWidth: 1200     // Memaksa mode desktop agar tampilan tabel luas & rapi saat direkam
+                },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { 
+                    mode: ['avoid-all', 'css', 'legacy'], // Menjaga pemotongan agar tidak memotong baris data atau saldo akhir di tengah halaman
+                    avoid: '.page-break-inside-avoid'
+                }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
+                closePdfModal();
             }).catch(err => {
                 console.error("Gagal export PDF:", err);
                 alert("Gagal mengunduh PDF. Silakan coba lagi.");
