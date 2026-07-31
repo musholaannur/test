@@ -2,16 +2,27 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RT 08 RW 04 - Laporan Kas Digital</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mushola Wakaf An-Nur - Laporan Infaq Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Pustaka html2pdf -->
+    <!-- Pustaka html2pdf.js untuk Generate PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         * {
             font-weight: 900 !important;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
+        
+        html, body {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f4f7f5;
@@ -32,7 +43,120 @@
             background: #0b3f27;
         }
         
-        /* Efek Radar */
+        .outer-overflow-hadang {
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            margin-bottom: 4px;
+        }
+        
+        .struktur-wrapper {
+            width: 1400px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            transform-origin: top center;
+            flex-shrink: 0;
+        }
+
+        .struktur-container {
+            width: 100%;
+            background-color: #2563eb;
+            border: 48px solid #2563eb;
+            border-radius: 0px;
+            padding: 0px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .struktur-inner {
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 40px;
+            padding: 56px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            align-items: center;
+        }
+        
+        .judul-struktur-utama {
+            font-size: 46px !important;
+            line-height: 1.2 !important;
+            font-weight: 900 !important;
+            color: #1d3557;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 0;
+            text-align: center;
+        }
+        .sub-judul-struktur {
+            font-size: 26px !important;
+            line-height: 1.3 !important;
+            font-weight: 900 !important;
+            color: #1d3557;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 4px 0 16px 0;
+            text-align: center;
+        }
+        
+        .struktur-row {
+            display: flex;
+            flex-direction: row; 
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1400px;
+            gap: 20px;
+            align-items: stretch;
+            justify-content: center;
+        }
+        
+        .struktur-container .box {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 4px solid #10b981;
+            border-radius: 14px;
+            padding: 18px 20px;
+            font-size: 21px;
+            font-weight: 900 !important; 
+            line-height: 1.4;
+            color: #0b6640;
+            text-shadow: 0 0 1px rgba(11, 102, 64, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.4), 0 0 8px rgba(0, 255, 102, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        
+        .struktur-container .box strong {
+            color: #0b6640;
+            font-weight: 900 !important;
+            font-size: 24px;
+            line-height: 1.2 !important;
+            margin-bottom: 8px;
+            align-self: stretch;
+            display: block;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 1px rgba(11, 102, 64, 0.4);
+            white-space: normal !important;
+            word-wrap: break-word;
+        }
+        
+        .row-1 .box { flex: 1; min-width: 280px; max-width: 330px; }
+        .row-2 .box { flex: 1; min-width: 260px; max-width: 300px; }
+        .row-3 .box { flex: 1; min-width: 260px; max-width: 300px; }
+        .row-4 .box-keamanan, .row-4 .box-perawatan, .row-4 .box-kegiatan { flex: 1; min-width: 280px; max-width: 330px; }
+        .row-4-b .box-kebersihan { flex: 1; min-width: 280px; max-width: 330px; }
+        .row-5 .box { width: 100%; max-width: 650px; }
+        
         .radar-pulse {
             position: relative;
             width: 8px;
@@ -58,7 +182,6 @@
             100% { transform: scale(1.4); opacity: 0; box-shadow: 0 0 12px #00FF66; }
         }
         
-        /* Salju */
         .snowflake {
             color: rgba(255, 255, 255, 0.5);
             font-size: 1.3em;
@@ -76,12 +199,30 @@
         @keyframes snowflakes-fall { 0% { top: -10%; } 100% { top: 105%; } }
         @keyframes snowflakes-shake { 0%, 100% { transform: translateX(0) rotate(0deg); } 50% { transform: translateX(60px) rotate(180deg); } }
 
-        .page-break-inside-avoid {
-            break-inside: avoid !important;
-            page-break-inside: avoid !important;
+        @keyframes logoMelayang {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+        .logo-terbang { animation: logoMelayang 4s ease-in-out infinite; }
+
+        .action-popover { animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes popIn { 0% { transform: scale(0.9) translateY(5px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+
+        #mutasi-list .grid, .w-full .grid {
+            display: grid !important;
+            grid-template-cols: repeat(12, minmax(0, 1fr)) !important;
         }
 
-        /* STYLE KHUSUS DOKUMEN CETAK PDF A4 TAJAM & RAPI */
+        @media (min-width: 768px) {
+            #mutasi-list .grid { font-size: 15px !important; padding-top: 14px !important; padding-bottom: 14px !important; }
+            #mutasi-list .keterangan-col span { font-size: 15px !important; }
+            #mutasi-list .keterangan-col a { font-size: 12px !important; }
+            #mutasi-list .grid > div { font-size: 15px !important; }
+            #mutasi-list .bg-blue-600 { font-size: 14px !important; padding-top: 12px !important; padding-bottom: 12px !important; }
+            #mutasi-list .bg-blue-600 div:last-child { font-size: 18px !important; }
+        }
+
         .pdf-render-box {
             width: 790px !important;
             box-sizing: border-box !important;
@@ -89,127 +230,138 @@
             margin: 0 !important;
             background-color: #ffffff !important;
         }
-        .pdf-table {
-            width: 100% !important;
-            border-collapse: collapse !important;
-        }
-        .pdf-table th {
-            background-color: #f1f5f9 !important;
-            color: #334155 !important;
-            padding: 8px 6px !important;
-            font-size: 11px !important;
-            border: 1px solid #cbd5e1 !important;
-            text-transform: uppercase !important;
-        }
-        .pdf-table td {
-            padding: 8px 6px !important;
-            font-size: 11px !important;
-            border: 1px solid #e2e8f0 !important;
-        }
-
-        @media print {
-            @page {
-                size: A4 portrait;
-                margin: 5mm;
-            }
-            body {
-                background-color: #ffffff !important;
-                padding: 0 !important;
-            }
-            #snow-container, [data-html2canvas-ignore="true"], #pdf-modal, #pin-modal, #transaction-modal {
-                display: none !important;
-            }
-            #report-container {
-                max-width: 100% !important;
-                width: 100% !important;
-                padding: 0 !important;
-                box-shadow: none !important;
-                background: transparent !important;
-            }
-            .mutasi-row, .rekap-row-block {
-                break-inside: avoid !important;
-                page-break-inside: avoid !important;
-            }
-        }
+        .pdf-table { width: 100% !important; border-collapse: collapse !important; }
+        .pdf-table th { background-color: #f1f5f9 !important; color: #334155 !important; padding: 8px 6px !important; font-size: 11px !important; border: 1px solid #cbd5e1 !important; text-transform: uppercase !important; }
+        .pdf-table td { padding: 8px 6px !important; font-size: 11px !important; border: 1px solid #e2e8f0 !important; }
     </style>
 </head>
-<body class="min-h-screen py-4 px-3 md:py-6 md:px-8 flex justify-center items-start">
+<body class="min-h-screen py-4 px-3 md:py-6 md:px-8 flex flex-col items-center justify-start">
 
     <div id="snow-container"></div>
 
-    <!-- REPORT CONTAINER UTAMA WEB -->
-    <div id="report-container" class="w-full max-w-6xl flex flex-col gap-4 relative z-10 bg-[#f4f7f5] p-2 rounded-2xl">
+    <div class="w-full max-w-6xl flex flex-col gap-4 relative z-10">
         
-        <!-- HEADER UTAMA -->
-        <div class="bg-gradient-to-r from-[#0d4a2a] via-[#106b3c] to-[#1da25a] text-center py-5 md:py-6 rounded-[28px] shadow-md px-4 flex flex-col gap-1 justify-center items-center overflow-hidden border border-emerald-900/20 page-break-inside-avoid">
-            <h1 class="text-[#00FF66] text-[3.8vw] md:text-[2.2vw] tracking-wider uppercase font-black block w-full text-center whitespace-nowrap px-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                LAPORAN KAS RT 08 RW 04, BAKALAN LOR
-            </h1>
-            <p class="text-white text-[2.7vw] md:text-[1.1vw] tracking-widest uppercase font-bold leading-normal mt-1 block w-full text-center whitespace-nowrap px-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
-                RT 08 : BP. PURNOMO | RW 04 : BP. KATENO
-            </p>
-            <div class="text-[#00FF66] text-[2.5vw] md:text-[0.9vw] font-black tracking-widest leading-relaxed max-w-2xl mx-auto mt-1 text-center uppercase whitespace-nowrap px-2" style="text-shadow: 0 0 4px rgba(0,255,102,0.3);">
-                LAPORAN KAS RT.08 DIGITAL SYSTEM
+        <div class="outer-overflow-hadang" id="js-outer-hadang">
+            <div class="struktur-wrapper" id="js-responsive-wrapper">
+                <div class="struktur-container">
+                    <div class="struktur-inner">
+                        <h1 class="judul-struktur-utama">STRUKTUR PENGURUS TAKMIR</h1>
+                        <h2 class="sub-judul-struktur">MUSHOLA WAKAF AN-NUR</h2>
+                        
+                        <div class="struktur-row row-1">
+                            <div class="box"><strong>Ketua</strong>Bp. Purnomo</div>
+                            <div class="box"><strong>Wakil Ketua</strong>Bp. Anton</div>
+                            <div class="box"><strong>Penasehat</strong>Bp. Mualif<br>Bp. Rokim, Bp. Mukarom<br>Bp. Fafa (Mas Wo)</div>
+                        </div>
+                        
+                        <div class="struktur-row row-2">
+                            <div class="box"><strong>Sekretaris</strong>Bp. Sujatmoko</div>
+                            <div class="box"><strong>Wakil Sekretaris</strong>Sdri. Nadia</div>
+                        </div>
+                        
+                        <div class="struktur-row row-3">
+                            <div class="box"><strong>Bendahara I</strong>Bp. Budi</div>
+                            <div class="box"><strong>Bendahara II</strong>Ibu Ratna</div>
+                        </div>
+                        
+                        <div class="struktur-row row-4">
+                            <div class="box box-keamanan"><strong>Seksi Keamanan</strong>Bp. Heru Prasetyo<br>Bp. Puguh</div>
+                            <div class="box box-perawatan"><strong>Seksi Perawatan</strong>Bp. Ipin<br>Bp. Widodo<br>Bp. Suparno<br>Bp. Doni</div>
+                            <div class="box box-kegiatan"><strong>Seksi Kegiatan</strong>Bp. Yatiran<br>Bp. Kardiyo<br>Ibu Nurul<br>Ibu Sumiaton<br>Sdri. Maya</div>
+                        </div>
+                        
+                        <div class="struktur-row row-4-b">
+                            <div class="box box-kebersihan"><strong>Seksi Kebersihan</strong>Bp. Dwiyani<br>Bp. Sutikno</div>
+                        </div>
+                        
+                        <div class="struktur-row row-5">
+                            <div class="box">
+                                <strong>Seksi Remaja Mushola</strong>
+                                Sdr. Vicky | Sdr. Azam<br>
+                                Sdr. Ibra | Sdr. Cilo<br>
+                                Sdr. Rizky | Sdr. Faris.<br>
+                                Sdri. Wulan, Sdri. Yopi, Dkk
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- SALDO UTAMA -->
-        <div class="bg-[#115e3b] text-white text-center py-7 md:py-10 rounded-3xl shadow-md relative overflow-hidden flex items-center justify-center px-4 md:px-10 page-break-inside-avoid">
+        <div class="bg-[#115e3b] text-center py-5 md:py-6 rounded-3xl shadow-sm px-4 flex flex-col gap-1 justify-center items-center overflow-hidden">
+            <h1 class="text-white text-[4.8vw] md:text-2xl tracking-wider uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] whitespace-nowrap overflow-visible block w-full text-center">
+                MUSHOLA WAKAF AN-NUR
+            </h1>
+            <p class="text-[#00FF66] text-[2.5vw] md:text-[11px] tracking-widest uppercase leading-none mt-1 whitespace-nowrap overflow-visible block w-full text-center">
+                LAPORAN INFAQ DIGITAL SYSTEM
+            </p>
+            <div class="text-white text-[2.3vw] md:text-[11px] font-normal tracking-wide leading-relaxed max-w-2xl mx-auto mt-2 text-center opacity-90 normal-case">
+                Untuk Transparansi Keuangan Infaq Mushola Wakaf An-Nur.<br>
+                Sekarang dapat diakses secara online & realtime melalui : <span class="text-[#00FF66] underline font-bold ml-0.5">musholaannur.vercel.app</span>
+            </div>
+        </div>
+
+        <div class="bg-[#2563eb] text-white text-center py-7 md:py-10 rounded-3xl shadow-md relative overflow-hidden flex items-center justify-between px-4 md:px-10">
+            <div class="flex-shrink-0 w-12 h-12 md:w-24 md:h-24 flex items-center justify-center">
+                <img src="https://lh3.googleusercontent.com/d/1yEEHTVwjw4Pzk-SMIJqex2CwiRSAhzOx" alt="Logo Kiri" class="w-full h-full object-contain logo-terbang" style="filter: drop-shadow(0px 12px 6px rgba(0, 0, 0, 0.45));">
+            </div>
+            
             <div class="flex-1 flex flex-col items-center justify-center px-2">
-                <div class="flex items-center justify-center gap-2 mb-2" data-html2canvas-ignore="true">
+                <div class="flex items-center justify-center gap-2 mb-2">
                     <div class="radar-pulse"></div>
                     <p class="text-[9px] md:text-[10px] text-[#00FF66] tracking-widest uppercase style-glow" style="text-shadow: 0 0 6px #00FF66, 0 0 12px rgba(0,255,102,0.4);">
                         SYSTEM ONLINE
                     </p>
                 </div>
-                <p class="text-[10px] md:text-xs text-emerald-100 mb-1 tracking-wide uppercase">SALDO KAS SAAT INI</p>
-                <p id="total-saldo" class="text-3xl sm:text-4xl md:text-7xl tracking-tight text-white break-words w-full text-center" style="text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.45);">Rp 0</p>
+                <p class="text-[10px] md:text-xs text-blue-100 mb-1 tracking-wide uppercase">SALDO INFAQ SAAT INI</p>
+                <p id="total-saldo" class="text-4xl md:text-7xl tracking-tight text-white" style="text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.45);">Rp 0</p>
+            </div>
+            
+            <div class="flex-shrink-0 w-12 h-12 md:w-24 md:h-24 flex items-center justify-center">
+                <img src="https://lh3.googleusercontent.com/d/1-SxLw_xUWkMeHEhlPV8Zm_G6imdkGc-d" alt="Logo Ristek" class="w-full h-full object-contain logo-terbang" style="filter: drop-shadow(0px 12px 6px rgba(0, 0, 0, 0.45));">
             </div>
         </div>
 
-        <!-- RINGKASAN PEMASUKAN & PENGELUARAN -->
-        <div class="grid grid-cols-2 gap-3 page-break-inside-avoid">
+        <div class="grid grid-cols-2 gap-3">
             <div class="bg-white border border-slate-200/80 p-3 md:p-4 rounded-2xl shadow-sm relative overflow-hidden">
                 <div class="absolute top-0 left-0 bottom-0 w-[4px] bg-[#10b981]"></div>
-                <p class="text-[9px] md:text-xs text-slate-500 uppercase tracking-wider mb-0.5 break-words">Total Pemasukan</p>
-                <p id="total-pemasukan" class="text-sm sm:text-base md:text-2xl text-[#10b981] break-words">Rp 0</p>
+                <p class="text-[9px] md:text-xs text-slate-500 uppercase tracking-wider mb-0.5">Total Pemasukan</p>
+                <p id="total-pemasukan" class="text-base md:text-2xl text-[#10b981]">Rp 0</p>
             </div>
             <div class="bg-white border border-slate-200/80 p-3 md:p-4 rounded-2xl shadow-sm relative overflow-hidden">
                 <div class="absolute top-0 left-0 bottom-0 w-[4px] bg-[#ef4444]"></div>
-                <p class="text-[9px] md:text-xs text-slate-500 uppercase tracking-wider mb-0.5 break-words">Total Pengeluaran</p>
-                <p id="total-pengeluaran" class="text-sm sm:text-base md:text-2xl text-[#ef4444] break-words">Rp 0</p>
+                <p class="text-[9px] md:text-xs text-slate-500 uppercase tracking-wider mb-0.5">Total Pengeluaran</p>
+                <p id="total-pengeluaran" class="text-base md:text-2xl text-[#ef4444]">Rp 0</p>
             </div>
         </div>
 
-        <!-- TOMBOL INPUT DATA -->
-        <button data-html2canvas-ignore="true" onclick="requestAccess('add')" class="w-full bg-[#10b981] hover:bg-[#059669] text-white py-3.5 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-sm tracking-wide text-xs md:text-sm uppercase text-center break-words">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-100 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+        <button onclick="requestAccess('add')" class="w-full bg-[#10b981] hover:bg-[#059669] text-white py-3.5 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-sm tracking-wide text-xs md:text-sm uppercase">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-100" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
             </svg>
-            <span class="break-words">INPUT DATA BARU</span>
+            Input Data Baru
         </button>
 
-        <!-- TABEL MUTASI KAS APP -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-3 md:p-6 shadow-sm overflow-hidden">
-            <div class="flex justify-between items-center mb-4 w-full gap-2">
-                <h2 class="text-emerald-800 text-xs md:text-base tracking-wide uppercase border-b-2 border-[#115e3b] pb-0.5 font-black break-words">LAPORAN MUTASI KAS RT 08</h2>
-                <span id="loading-status" class="text-[9px] md:text-xs text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 shrink-0" data-html2canvas-ignore="true">Sinkron...</span>
+        <div class="bg-white border border-slate-200 rounded-2xl p-1.5 md:p-6 shadow-sm overflow-hidden">
+            <div class="flex justify-between items-center mb-4 w-full gap-2 px-1">
+                <h2 class="text-emerald-800 text-xs md:text-base tracking-wide uppercase border-b-2 border-[#115e3b] pb-0.5 font-black break-words">LAPORAN MUTASI INFAQ</h2>
+                <span id="loading-status" class="text-[2vw] md:text-xs text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 shrink-0">Sinkron...</span>
             </div>
             
-            <div class="hidden md:grid grid-cols-12 text-xs text-slate-700 uppercase border-b border-slate-200 pb-2 mb-2 tracking-wider bg-slate-100 p-2 rounded-lg text-center w-full page-break-inside-avoid">
-                <div class="col-span-1 text-left pl-1 border-r border-slate-200 shrink-0">Tanggal</div>
-                <div class="col-span-4 text-left px-4 border-r border-slate-200 min-w-[120px]">Keterangan</div>
-                <div class="col-span-2 text-right pr-4 border-r border-slate-200 shrink-0">Masuk</div>
-                <div class="col-span-2 text-right pr-4 border-r border-slate-200 shrink-0">Keluar</div>
-                <div class="col-span-2 text-right pr-4 border-r border-slate-200 shrink-0">Saldo</div>
-                <div class="col-span-1 shrink-0 text-[10px] tracking-tight text-slate-500 font-medium" data-html2canvas-ignore="true">Aksi</div>
+            <div class="w-full overflow-hidden">
+                <div class="grid grid-cols-12 text-[1.6vw] md:text-sm text-slate-500 uppercase border-b border-slate-200 pb-2 mb-1 tracking-wider bg-slate-50 p-1 md:p-2 text-center w-full">
+                    <div class="col-span-2 text-left pl-1">Tanggal</div>
+                    <div class="col-span-4 text-left px-1">Keterangan</div>
+                    <div class="col-span-2 text-right pr-1">Masuk</div>
+                    <div class="col-span-2 text-right pr-1">Keluar</div>
+                    <div class="col-span-2 text-right pr-1 md:pr-4">Saldo</div>
+                </div>
+                
+                <div id="mutasi-list" class="flex flex-col w-full"></div>
             </div>
-            
-            <div id="mutasi-list" class="flex flex-col gap-2 md:gap-1 text-xs md:text-sm w-full"></div>
         </div>
 
-        <!-- FOOTER MBS ID -->
-        <div class="text-center py-2 flex flex-col items-center justify-center page-break-inside-avoid">
+        <div class="text-center py-1 flex flex-col items-center justify-center">
             <button onclick="openPdfModal()" class="text-[9px] md:text-xs tracking-widest text-slate-400 hover:text-emerald-700 active:scale-95 transition-all duration-200 uppercase break-words cursor-pointer select-none font-black flex items-center justify-center gap-1 group py-1 px-3 rounded-lg hover:bg-emerald-50/50">
                 <span>POWERED BY : MBS ID</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-0 group-hover:opacity-100 text-emerald-600 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -218,9 +370,8 @@
             </button>
         </div>
     </div>
-
     <!-- MODAL POPUP DOWNLOAD PDF -->
-    <div id="pdf-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn" data-html2canvas-ignore="true">
+    <div id="pdf-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xs p-5 shadow-2xl relative text-slate-800 text-center">
             <div class="w-12 h-12 rounded-full bg-emerald-100 text-[#115e3b] flex items-center justify-center mx-auto mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -242,10 +393,23 @@
         </div>
     </div>
 
-    <!-- MODAL INPUT TRANSAKSI -->
-    <div id="transaction-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50" data-html2canvas-ignore="true">
+    <!-- POPOVER MENU AKSY MELAYANG GLOBAL -->
+    <div id="mobile-action-menu" class="hidden fixed z-50 bg-slate-900 text-white rounded-xl shadow-xl border border-slate-700 px-3 py-2 flex items-center gap-4 action-popover">
+        <button id="mobile-btn-edit" class="flex items-center gap-1.5 text-amber-400 text-xs uppercase font-black tracking-wider hover:opacity-80">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+            <span>Edit</span>
+        </button>
+        <div class="w-[1px] h-4 bg-slate-700"></div>
+        <button id="mobile-btn-delete" class="flex items-center gap-1.5 text-rose-500 text-xs uppercase font-black tracking-wider hover:opacity-80">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            <span>Hapus</span>
+        </button>
+    </div>
+
+    <!-- MODAL TRANSACTION -->
+    <div id="transaction-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-sm p-5 shadow-xl relative text-slate-800">
-            <h3 id="modal-title" class="text-[#115e3b] text-sm uppercase mb-4 break-words">Input Data Kas</h3>
+            <h3 id="modal-title" class="text-[#115e3b] text-sm uppercase mb-4">Input Data Infaq</h3>
             <form id="transaction-form" onsubmit="handleFormSubmit(event)">
                 <input type="hidden" id="form-id">
                 <div class="flex flex-col gap-3.5">
@@ -255,7 +419,7 @@
                     </div>
                     <div>
                         <label class="text-[9px] text-slate-500 uppercase block mb-1">Keterangan Input</label>
-                        <input type="text" id="form-keterangan" placeholder="INPUT DATA BARU" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs text-slate-800 focus:outline-none focus:border-[#115e3b]" required>
+                        <input type="text" id="form-keterangan" placeholder="INPUT INFAQ BARU" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs text-slate-800 focus:outline-none focus:border-[#115e3b]" required>
                     </div>
                     <div class="grid grid-cols-2 gap-2.5">
                         <div>
@@ -273,40 +437,68 @@
                     </div>
                 </div>
                 <div class="flex justify-end gap-2 mt-5">
-                    <button type="button" onclick="closeModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-xs uppercase">Batal</button>
+                    <button type="button" onclick="closeModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-xs">Batal</button>
                     <button type="submit" class="bg-gradient-to-r from-[#115e3b] to-[#0b3f27] text-white px-4 py-2 rounded-xl text-xs uppercase tracking-wider">SAVE</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL PIN -->
-    <div id="pin-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn" data-html2canvas-ignore="true">
+    <!-- MODAL SECURITY PIN -->
+    <div id="pin-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xs p-5 shadow-2xl relative text-slate-800 text-center">
             <div class="w-12 h-12 rounded-full bg-emerald-50 text-[#115e3b] flex items-center justify-center mx-auto mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
             </div>
-            <h3 class="text-[#115e3b] text-sm uppercase mb-1 break-words">PIN Otorisasi Sistem</h3>
-            <p class="text-[10px] text-slate-400 mb-4 uppercase tracking-wide break-words">Masukkan PIN Keamanan Sistem</p>
+            <h3 class="text-[#115e3b] text-sm uppercase mb-1">PIN Otorisasi Takmir</h3>
+            <p class="text-[10px] text-slate-400 mb-4 uppercase tracking-wide">Masukkan PIN Keamanan Sistem</p>
             <form id="pin-form" onsubmit="submitPinVerification(event)">
                 <div class="mb-4">
                     <input type="password" id="input-security-pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="••••••" class="w-full text-center bg-slate-50 border border-slate-300 rounded-xl p-3 text-lg font-black tracking-widest text-slate-800 focus:outline-none focus:border-[#115e3b]" required autocomplete="off">
                 </div>
                 <div class="flex gap-2">
-                    <button type="button" onclick="closePinModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs uppercase tracking-wider break-words">Batal</button>
-                    <button type="submit" class="w-1/2 bg-gradient-to-r from-[#115e3b] to-[#0b3f27] text-white py-2.5 rounded-xl text-xs uppercase tracking-wider break-words">Verifikasi</button>
+                    <button type="button" onclick="closePinModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs uppercase tracking-wider">Batal</button>
+                    <button type="submit" class="w-1/2 bg-gradient-to-r from-[#115e3b] to-[#0b3f27] text-white py-2.5 rounded-xl text-xs uppercase tracking-wider">Verifikasi</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxEVJmHYhLlGSKqy8u5t6HusWdLMI-PJoidvoaEaWsB9f5GUrRvP47OyVIqSA3SfQSz/exec";
-        const SECURITY_PIN = "999";
+        function samakanDesktopDanMobile() {
+            const wrapper = document.getElementById('js-responsive-wrapper');
+            const outerHadang = document.getElementById('js-outer-hadang');
+            if(!wrapper || !outerHadang) return;
+            
+            wrapper.style.transform = 'none';
+            wrapper.style.marginBottom = '0px';
+            wrapper.style.width = '1400px';
+
+            const lebarLayar = outerHadang.clientWidth;
+            const lebarTarget = 1400;
+
+            if (lebarLayar < lebarTarget && lebarLayar > 0) {
+                const skala = lebarLayar / lebarTarget;
+                wrapper.style.transform = `scale(${skala})`;
+                const tinggiSkala = wrapper.offsetHeight * skala;
+                const selisihTinggi = wrapper.offsetHeight - tinggiSkala;
+                wrapper.style.marginBottom = `-${selisihTinggi}px`;
+            }
+        }
+
+        window.addEventListener('load', () => { setTimeout(samakanDesktopDanMobile, 100); });
+        window.addEventListener('resize', samakanDesktopDanMobile);
+        window.addEventListener('DOMContentLoaded', samakanDesktopDanMobile);
+        window.addEventListener('orientationchange', () => { setTimeout(samakanDesktopDanMobile, 300); });
+
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxXHeovAbctksR4_iePWoyyLHN_tQ6tefG3VbeVAG4y49hQwdc6sPZ9alD_EzTGdDiMDw/exec";
+        const SECURITY_PIN = "909";
         let currentDatabase = [];
-        let currentAccessSession = { mode: null, index: null };
+        let currentAccessSession = { mode: null, dataId: null };
+        let activeSessionPin = ""; 
+        let longPressTimer = null;
 
         function createSnowflake() {
             const snowChars = ['❄','❅','❆','✻'];
@@ -318,216 +510,72 @@
             const randomDelayShake = (Math.random() * -5) + 's';
             snow.style.animationDelay = `${randomDelayFall}, ${randomDelayShake}`;
             const container = document.getElementById('snow-container');
-            if (container) {
-                container.appendChild(snow);
+            if (container) container.appendChild(snow);
+        }
+        for (let i = 0; i < 12; i++) { createSnowflake(); }
+
+        function formatRupiah(angka) { return "Rp " + new Intl.NumberFormat('id-ID').format(angka); }
+
+        function formatToDMYString(dateInput) {
+            if (!dateInput) return "";
+            let date = new Date(dateInput);
+            if (typeof dateInput === 'string' && dateInput.includes("/")) {
+                const parts = dateInput.split("/");
+                if (parts.length === 3) return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[2]}`;
             }
+            if (isNaN(date.getTime())) return dateInput; 
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
         }
 
-        for (let i = 0; i < 12; i++) {
-            createSnowflake();
+        function parseDMYToDate(dmyString) {
+            if (!dmyString) return new Date();
+            if (typeof dmyString === 'string' && dmyString.includes("/")) {
+                const parts = dmyString.split("/");
+                return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+            }
+            return new Date(dmyString);
         }
 
-        function formatRupiah(angka) {
+        function formatRupiahMutasi(angka, type) {
+            if (angka === 0 || !angka) {
+                return `<span class="hidden md:inline text-rose-500 font-bold">-</span><span class="inline md:hidden"></span>`;
+            }
             return "Rp " + new Intl.NumberFormat('id-ID').format(angka);
         }
 
-        function convertDateToUI(dateString) {
-            if (!dateString) return "-";
-            if (dateString.includes(" ") && isNaN(dateString)) {
-                const parsedDate = new Date(dateString);
-                if (!isNaN(parsedDate.getTime())) {
-                    const dd = String(parsedDate.getDate()).padStart(2, '0');
-                    const mm = String(parsedDate.getMonth() + 1).padStart(2, '0');
-                    const yyyy = parsedDate.getFullYear();
-                    return `${dd}/${mm}/${yyyy}`;
-                }
+        function convertDMYToInputDate(dmyString) {
+            if (!dmyString) return "";
+            let cleanFormat = formatToDMYString(dmyString);
+            const parts = cleanFormat.split("/");
+            if (parts.length === 3) {
+                return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
             }
-            if (dateString.includes("-")) {
-                const parts = dateString.split("T")[0].split("-");
-                if (parts.length === 3) {
-                    return `${parts[2]}/${parts[1]}/${parts[0]}`;
-                }
-            }
-            return dateString;
+            return "";
         }
 
-        function getNamaBulan(dateStr) {
-            const date = new Date(dateStr);
+        function getNamaBulan(dmyString) {
+            const date = parseDMYToDate(dmyString);
             const namaBulan = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
             return !isNaN(date.getTime()) ? `${namaBulan[date.getMonth()]} ${date.getFullYear()}` : "-";
         }
 
-        function saveToLocalStorage() {
-            localStorage.setItem("KAS_RT_DATABASE", JSON.stringify(currentDatabase));
-        }
-
-        function loadFromLocalStorage() {
-            const localData = localStorage.getItem("KAS_RT_DATABASE");
+        function saveToLocalStorage() { localStorage.setItem("INFAQ_AN_NUR_DATABASE", JSON.stringify(currentDatabase)); }
+        function loadFromLocalStorage() { 
+            const localData = localStorage.getItem("INFAQ_AN_NUR_DATABASE"); 
             if (localData) {
-                currentDatabase = JSON.parse(localData);
+                currentDatabase = JSON.parse(localData); 
             } else {
-                currentDatabase = [];
+                currentDatabase = [{ tanggal: "2025-01-01", keterangan: "SALDO INFAQ AWAL", masuk: 1000000, keluar: 0, nota: "" }];
                 saveToLocalStorage();
             }
         }
 
-        function openPdfModal() {
-            document.getElementById("pdf-modal").classList.remove("hidden");
-        }
+        function openPdfModal() { document.getElementById("pdf-modal").classList.remove("hidden"); }
+        function closePdfModal() { document.getElementById("pdf-modal").classList.add("hidden"); }
 
-        function closePdfModal() {
-            document.getElementById("pdf-modal").classList.add("hidden");
-        }
-
-        function requestAccess(mode, index = null) {
-            currentAccessSession.mode = mode;
-            currentAccessSession.index = index;
-            document.getElementById("input-security-pin").value = "";
-            document.getElementById("pin-modal").classList.remove("hidden");
-            document.getElementById("input-security-pin").focus();
-        }
-
-        function closePinModal() {
-            document.getElementById("pin-modal").classList.add("hidden");
-        }
-
-        function submitPinVerification(e) {
-            e.preventDefault();
-            const typedPin = document.getElementById("input-security-pin").value;
-            if (typedPin === SECURITY_PIN) {
-                closePinModal();
-                if (currentAccessSession.mode === 'add') {
-                    openModal('add');
-                } else if (currentAccessSession.mode === 'delete') {
-                    executeDelete(currentAccessSession.index);
-                }
-            } else {
-                alert("⚠️ PIN Salah! Akses ditolak.");
-                document.getElementById("input-security-pin").value = "";
-                document.getElementById("input-security-pin").focus();
-            }
-        }
-
-        function openModal(mode, index = null) {
-            const modal = document.getElementById("transaction-modal");
-            const title = document.getElementById("modal-title");
-            const form = document.getElementById("transaction-form");
-            form.reset();
-            modal.classList.remove("hidden");
-            if (mode === 'add') {
-                title.innerText = "Input Data Kas";
-                document.getElementById("form-id").value = "";
-                document.getElementById("form-masuk").value = "0";
-                document.getElementById("form-keluar").value = "0";
-                document.getElementById("form-tanggal").value = new Date().toISOString().split('T')[0];
-            }
-        }
-
-        function closeModal() {
-            document.getElementById("transaction-modal").classList.add("hidden");
-        }
-
-        function renderData(rows) {
-            const container = document.getElementById("mutasi-list");
-            container.innerHTML = "";
-            let runningSaldo = 0;
-            let totalMasuk = 0;
-            let totalKeluar = 0;
-            
-            rows.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
-            
-            rows.forEach((item, index) => {
-                const masuk = parseInt(item.masuk) || 0;
-                const keluar = parseInt(item.keluar) || 0;
-                totalMasuk += masuk;
-                totalKeluar += keluar;
-                runningSaldo += (masuk - keluar);
-                
-                const baseBgRow = index % 2 === 0 ? 'bg-white' : 'bg-slate-50/70';
-                const rowContainer = document.createElement("div");
-                rowContainer.className = `mutasi-row page-break-inside-avoid flex flex-col md:grid md:grid-cols-12 md:items-center p-3 py-2 md:py-2 md:px-2 border border-slate-200 md:border-b md:border-x-0 md:border-t-0 rounded-xl md:rounded-none shadow-sm md:shadow-none hover:bg-emerald-50/40 transition gap-2 md:gap-0 ${baseBgRow} w-full overflow-hidden`;
-                
-                let notaHtml = "";
-                if (item.nota && item.nota.trim() !== "") {
-                    notaHtml = `
-                        <div class="w-full flex justify-start text-left mt-1.5 md:mt-1 md:px-0">
-                            <a href="${item.nota}" target="_blank" class="text-[11px] text-blue-600 hover:text-blue-800 bg-[#e8f0fe] hover:bg-blue-100 px-2 py-0.5 rounded-md inline-flex items-center transition-colors tracking-wide text-left uppercase whitespace-nowrap font-black select-none">
-                                Lihat Foto Nota
-                            </a>
-                        </div>`;
-                }
-                
-                rowContainer.innerHTML = `
-                    <div class="flex justify-between items-center md:col-span-1 text-slate-500 text-[11px] md:text-sm border-b border-dashed border-slate-100 md:border-0 pb-1 md:pb-0 shrink-0 gap-2">
-                        <span class="md:hidden text-slate-400 uppercase text-[9px] shrink-0">Tanggal:</span>
-                        <span class="break-words whitespace-normal text-right md:text-left font-black">${convertDateToUI(item.tanggal)}</span>
-                        <button data-html2canvas-ignore="true" onclick="requestAccess('delete', ${index})" class="md:hidden text-rose-500 hover:text-rose-700 p-1 bg-rose-50 rounded shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                        </button>
-                    </div>
-                    
-                    <div class="md:col-span-4 text-slate-700 uppercase leading-tight text-xs md:text-sm flex flex-row md:flex-col items-start justify-start md:justify-center min-w-0 w-full text-left md:pl-4">
-                        <span class="md:hidden text-slate-400 uppercase text-[9px] tracking-wider text-left block shrink-0 pt-0.5 select-none pr-1">Keterangan:</span>
-                        
-                        <div class="flex-1 flex flex-col items-start justify-center text-left min-w-0 md:w-full md:px-0">
-                            <span class="text-left break-all whitespace-normal uppercase font-black text-slate-900 text-[13px] md:text-sm block w-full">${item.keterangan}</span>
-                            ${notaHtml}
-                        </div>
-                    </div>
-                    
-                    <div class="md:col-span-2 md:text-right text-[#10b981] text-xs md:text-sm flex justify-between md:justify-end md:pr-4 min-w-0 flex-1 w-full gap-2">
-                        <span class="md:hidden text-slate-400 uppercase text-[9px] shrink-0">Masuk (+):</span>
-                        <span class="break-words whitespace-normal text-right font-black">${masuk > 0 ? formatRupiah(masuk) : "-"}</span>
-                    </div>
-                    <div class="md:col-span-2 md:text-right text-[#ef4444] text-xs md:text-sm flex justify-between md:justify-end md:pr-4 min-w-0 flex-1 w-full gap-2">
-                        <span class="md:hidden text-slate-400 uppercase text-[9px] shrink-0">Keluar (-):</span>
-                        <span class="break-words whitespace-normal text-right font-black">${keluar > 0 ? formatRupiah(keluar) : "-"}</span>
-                    </div>
-                    <div class="md:col-span-2 md:text-right text-blue-600 md:text-emerald-700 text-xs md:text-sm flex justify-between md:justify-end md:pr-4 bg-blue-50/70 md:bg-transparent p-1.5 md:p-0 rounded-lg min-w-0 flex-1 w-full gap-2 items-center">
-                        <span class="md:hidden text-slate-500 uppercase text-[9px] shrink-0">Saldo Akhir:</span>
-                        <span class="break-words whitespace-normal text-right font-black text-sm md:text-sm">${formatRupiah(runningSaldo)}</span>
-                    </div>
-                    <div class="hidden md:flex md:col-span-1 justify-center shrink-0" data-html2canvas-ignore="true">
-                        <button onclick="requestAccess('delete', ${index})" class="text-rose-500 hover:text-rose-600 transition p-1" title="Hapus">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                        </button>
-                    </div>
-                `;
-                container.appendChild(rowContainer);
-                
-                let isEndOfMonth = false;
-                if (index === rows.length - 1) {
-                    isEndOfMonth = true;
-                } else {
-                    const currentTxDate = new Date(item.tanggal);
-                    const nextTxDate = new Date(rows[index + 1].tanggal);
-                    if (currentTxDate.getMonth() !== nextTxDate.getMonth() || currentTxDate.getFullYear() !== nextTxDate.getFullYear()) {
-                        isEndOfMonth = true;
-                    }
-                }
-                
-                if (isEndOfMonth) {
-                    const rekapDiv = document.createElement("div");
-                    rekapDiv.className = "rekap-row-block page-break-inside-avoid flex flex-col md:grid md:grid-cols-12 md:items-center py-2.5 px-3 my-2 bg-[#115e3b] text-white rounded-xl border border-emerald-800 shadow-sm text-[11px] md:text-xs tracking-wide uppercase w-full text-center gap-1 md:gap-0 overflow-hidden";
-                    rekapDiv.innerHTML = `
-                        <div class="md:contents flex flex-col items-center justify-center gap-1 w-full">
-                            <div class="md:col-span-5 font-black normal-case md:px-4 text-center md:text-left break-words w-full">AKUMULASI SALDO BULAN ${getNamaBulan(item.tanggal)}</div>
-                            <div class="hidden md:block md:col-span-1 shrink-0"></div>
-                            <div class="hidden md:block md:col-span-2 shrink-0"></div>
-                            <div class="hidden md:block md:col-span-2 shrink-0"></div>
-                            <div class="md:col-span-2 md:text-right font-black normal-case md:pr-4 shrink-0 text-sm md:text-lg font-black w-full text-center break-words">${formatRupiah(runningSaldo)}</div>
-                        </div>
-                    `;
-                    container.appendChild(rekapDiv);
-                }
-            });
-            
-            document.getElementById("total-saldo").innerText = formatRupiah(runningSaldo);
-            document.getElementById("total-pemasukan").innerText = formatRupiah(totalMasuk);
-            document.getElementById("total-pengeluaran").innerText = formatRupiah(totalKeluar);
-        }
-
-        /* FUNGSI EKSPOR PDF PRESISI TANPA MARGIN KOSONG DI ATAS & TABEL RAPI */
         function exportToPDF() {
             const btn = document.getElementById("download-pdf-btn");
             const originalText = btn.innerHTML;
@@ -536,15 +584,15 @@
 
             const todayStr = new Date().toISOString().split('T')[0];
 
-            // Hitung total saldo, masuk, keluar saat ini
             let runningSaldo = 0;
             let totalMasuk = 0;
             let totalKeluar = 0;
 
             let tableRowsHtml = "";
-            currentDatabase.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+            let tempDb = [...currentDatabase];
+            tempDb.sort((a, b) => parseDMYToDate(a.tanggal) - parseDMYToDate(b.tanggal));
 
-            currentDatabase.forEach((item, index) => {
+            tempDb.forEach((item, index) => {
                 const masuk = parseInt(item.masuk) || 0;
                 const keluar = parseInt(item.keluar) || 0;
                 totalMasuk += masuk;
@@ -553,7 +601,7 @@
 
                 tableRowsHtml += `
                     <tr>
-                        <td style="text-align: center;">${convertDateToUI(item.tanggal)}</td>
+                        <td style="text-align: center;">${formatToDMYString(item.tanggal)}</td>
                         <td style="text-align: left; font-weight: bold;">${item.keterangan}</td>
                         <td style="text-align: right; color: #10b981;">${masuk > 0 ? formatRupiah(masuk) : "-"}</td>
                         <td style="text-align: right; color: #ef4444;">${keluar > 0 ? formatRupiah(keluar) : "-"}</td>
@@ -562,11 +610,11 @@
                 `;
 
                 let isEndOfMonth = false;
-                if (index === currentDatabase.length - 1) {
+                if (index === tempDb.length - 1) {
                     isEndOfMonth = true;
                 } else {
-                    const currentTxDate = new Date(item.tanggal);
-                    const nextTxDate = new Date(currentDatabase[index + 1].tanggal);
+                    const currentTxDate = parseDMYToDate(item.tanggal);
+                    const nextTxDate = parseDMYToDate(tempDb[index + 1].tanggal);
                     if (currentTxDate.getMonth() !== nextTxDate.getMonth() || currentTxDate.getFullYear() !== nextTxDate.getFullYear()) {
                         isEndOfMonth = true;
                     }
@@ -582,15 +630,14 @@
                 }
             });
 
-            if (currentDatabase.length === 0) {
+            if (tempDb.length === 0) {
                 tableRowsHtml = `
                     <tr>
-                        <td colspan="5" style="text-align: center; color: #64748b; padding: 20px;">Belum ada data transaksi kas.</td>
+                        <td colspan="5" style="text-align: center; color: #64748b; padding: 20px;">Belum ada data transaksi infaq.</td>
                     </tr>
                 `;
             }
 
-            // Buat HTML Khusus PDF Cetak tanpa margin kosong di atas
             const renderWrapper = document.createElement('div');
             renderWrapper.style.position = 'absolute';
             renderWrapper.style.left = '-9999px';
@@ -600,13 +647,13 @@
             renderWrapper.innerHTML = `
                 <div class="pdf-render-box">
                     <div style="background: linear-gradient(135deg, #0d4a2a, #106b3c, #1da25a); color: white; text-align: center; padding: 16px; border-radius: 16px; margin-bottom: 12px;">
-                        <h1 style="color: #00FF66; margin: 0; font-size: 16pt; text-transform: uppercase; font-weight: 900;">LAPORAN KAS RT 08 RW 04, BAKALAN LOR</h1>
-                        <p style="margin: 4px 0 0 0; font-size: 10pt; font-weight: bold;">RT 08 : BP. PURNOMO | RW 04 : BP. KATENO</p>
-                        <div style="color: #00FF66; font-size: 8pt; font-weight: 900; margin-top: 4px;">LAPORAN KAS RT.08 DIGITAL SYSTEM</div>
+                        <h1 style="color: #00FF66; margin: 0; font-size: 16pt; text-transform: uppercase; font-weight: 900;">MUSHOLA WAKAF AN-NUR</h1>
+                        <p style="margin: 4px 0 0 0; font-size: 10pt; font-weight: bold;">LAPORAN INFAQ DIGITAL SYSTEM</p>
+                        <div style="color: #00FF66; font-size: 8pt; font-weight: 900; margin-top: 4px;">musholaannur.vercel.app</div>
                     </div>
 
                     <div style="background-color: #115e3b; color: white; text-align: center; padding: 18px; border-radius: 16px; margin-bottom: 12px;">
-                        <div style="font-size: 9pt; color: #a7f3d0; text-transform: uppercase;">SALDO KAS SAAT INI</div>
+                        <div style="font-size: 9pt; color: #a7f3d0; text-transform: uppercase;">SALDO INFAQ SAAT INI</div>
                         <div style="font-size: 30pt; font-weight: 900; color: white; margin-top: 2px;">${formatRupiah(runningSaldo)}</div>
                     </div>
 
@@ -625,7 +672,7 @@
                     </table>
 
                     <div style="background: white; border: 1px solid #cbd5e1; border-radius: 12px; padding: 12px;">
-                        <div style="color: #065f46; font-size: 11pt; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #115e3b; padding-bottom: 4px; margin-bottom: 10px;">LAPORAN MUTASI KAS RT 08</div>
+                        <div style="color: #065f46; font-size: 11pt; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #115e3b; padding-bottom: 4px; margin-bottom: 10px;">LAPORAN MUTASI INFAQ</div>
                         <table class="pdf-table">
                             <thead>
                                 <tr>
@@ -651,16 +698,10 @@
             document.body.appendChild(renderWrapper);
 
             const opt = {
-                margin:       [4, 4, 4, 4], // Margin sangat tipis (4mm) agar langsung dari paling atas kertas A4
-                filename:     `Laporan_Kas_RT08_${todayStr}.pdf`,
+                margin:       [4, 4, 4, 4],
+                filename:     `Laporan_Infaq_An_Nur_${todayStr}.pdf`,
                 image:        { type: 'jpeg', quality: 1.0 },
-                html2canvas:  { 
-                    scale: 3,             // Kualitas UHD 3x Retina Display Anti-Pecah
-                    useCORS: true, 
-                    logging: false,
-                    letterRendering: true,
-                    width: 790
-                },
+                html2canvas:  { scale: 3, useCORS: true, logging: false, letterRendering: true, width: 790 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
@@ -681,72 +722,272 @@
             });
         }
 
+        function requestAccess(mode, dataId = null) {
+            hideMobileActionMenu();
+            currentAccessSession.mode = mode;
+            currentAccessSession.dataId = dataId;
+            document.getElementById("input-security-pin").value = "";
+            document.getElementById("pin-modal").classList.remove("hidden");
+            document.getElementById("input-security-pin").focus();
+        }
+
+        function closePinModal() { document.getElementById("pin-modal").classList.add("hidden"); }
+
+        function submitPinVerification(e) {
+            e.preventDefault();
+            const typedPin = document.getElementById("input-security-pin").value;
+            if (typedPin === SECURITY_PIN) {
+                activeSessionPin = typedPin;
+                closePinModal();
+                if (currentAccessSession.mode === 'add') {
+                    openModal('add');
+                } else if (currentAccessSession.mode === 'edit') {
+                    openModal('edit', currentAccessSession.dataId);
+                } else if (currentAccessSession.mode === 'delete') {
+                    executeDelete(currentAccessSession.dataId);
+                }
+            } else {
+                alert("⚠️ PIN Salah! Akses ditolak.");
+                document.getElementById("input-security-pin").value = "";
+                document.getElementById("input-security-pin").focus();
+            }
+        }
+
+        function openModal(mode, dataId = null) {
+            const modal = document.getElementById("transaction-modal");
+            const title = document.getElementById("modal-title");
+            const form = document.getElementById("transaction-form");
+            form.reset();
+            modal.classList.remove("hidden");
+            
+            if (mode === 'add') {
+                title.innerText = "Input Data Infaq";
+                document.getElementById("form-id").value = "";
+                document.getElementById("form-masuk").value = "0";
+                document.getElementById("form-keluar").value = "0";
+                document.getElementById("form-tanggal").value = new Date().toISOString().split('T')[0];
+            } else if (mode === 'edit' && dataId !== null) {
+                title.innerText = "Edit Data Infaq";
+                const item = currentDatabase.find(x => x.dataId === dataId);
+                if(!item) return closeModal();
+                
+                document.getElementById("form-id").value = dataId;
+                document.getElementById("form-tanggal").value = convertDMYToInputDate(item.tanggal);
+                document.getElementById("form-keterangan").value = item.keterangan.toString().trim().toUpperCase();
+                document.getElementById("form-masuk").value = item.masuk || 0;
+                document.getElementById("form-keluar").value = item.keluar || 0;
+                document.getElementById("form-nota").value = item.nota || "";
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("transaction-modal").classList.add("hidden");
+            activeSessionPin = ""; 
+        }
+
+        function setupLongPress(element, dataId) {
+            element.addEventListener('touchstart', (e) => {
+                longPressTimer = setTimeout(() => {
+                    showMobileActionMenu(e.touches[0].clientX, e.touches[0].clientY, dataId);
+                }, 2000);
+            }, { passive: true });
+
+            element.addEventListener('touchend', () => clearTimeout(longPressTimer));
+            element.addEventListener('touchmove', () => clearTimeout(longPressTimer));
+
+            element.addEventListener('mousedown', (e) => {
+                if(e.button !== 0) return;
+                longPressTimer = setTimeout(() => {
+                    showMobileActionMenu(e.clientX, e.clientY, dataId);
+                }, 2000);
+            });
+
+            element.addEventListener('mouseup', () => clearTimeout(longPressTimer));
+            element.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
+        }
+
+        function showMobileActionMenu(x, y, dataId) {
+            const menu = document.getElementById("mobile-action-menu");
+            menu.classList.remove("hidden");
+            
+            let menuWidth = 150; 
+            let posX = x - (menuWidth / 2);
+            let posY = y - 55; 
+
+            if(posX < 10) posX = 10;
+            if(posX + menuWidth > window.innerWidth) posX = window.innerWidth - menuWidth - 10;
+            if(posY < 10) posY = y + 20;
+
+            menu.style.left = `${posX}px`;
+            menu.style.top = `${posY}px`;
+
+            document.getElementById("mobile-btn-edit").onclick = () => requestAccess('edit', dataId);
+            document.getElementById("mobile-btn-delete").onclick = () => requestAccess('delete', dataId);
+        }
+
+        function hideMobileActionMenu() {
+            document.getElementById("mobile-action-menu").classList.add("hidden");
+        }
+
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById("mobile-action-menu");
+            if (!menu.contains(e.target) && !e.target.closest('.keterangan-col')) {
+                hideMobileActionMenu();
+            }
+        });
+
+        function renderData(rows) {
+            const container = document.getElementById("mutasi-list");
+            if(!container) return;
+            container.innerHTML = "";
+            let runningSaldo = 0;
+            let totalMasuk = 0;
+            let totalKeluar = 0;
+            
+            rows.forEach((item, originalIdx) => {
+                item.dataId = "ID_" + originalIdx + "_" + item.masuk + "_" + item.keluar;
+            });
+
+            rows.sort((a, b) => parseDMYToDate(a.tanggal) - parseDMYToDate(b.tanggal));
+            
+            rows.forEach((item, index) => {
+                const masuk = parseInt(item.masuk) || 0;
+                const keluar = parseInt(item.keluar) || 0;
+                totalMasuk += masuk;
+                totalKeluar += keluar;
+                runningSaldo += (masuk - keluar);
+                
+                const baseBgRow = index % 2 === 0 ? 'bg-white' : 'bg-slate-50/50';
+                const rowContainer = document.createElement("div");
+                
+                rowContainer.className = `grid grid-cols-12 items-center py-2.5 border-b border-slate-100 text-[1.6vw] md:text-xs w-full tracking-tighter md:tracking-normal ${baseBgRow}`;
+                
+                let notaHtml = "";
+                if (item.nota && item.nota.trim() !== "") {
+                    notaHtml = `
+                        <div class="block text-left mt-0.5">
+                            <a href="${item.nota}" target="_blank" class="text-[1.1vw] md:text-[10px] text-blue-600 font-bold uppercase hover:underline block leading-none">
+                                Lihat Foto Nota
+                            </a>
+                        </div>`;
+                }
+                
+                const displayTanggal = formatToDMYString(item.tanggal);
+                const colorMasuk = masuk > 0 ? 'text-[#10b981]' : 'text-rose-500';
+                const colorKeluar = keluar > 0 ? 'text-rose-500' : 'text-rose-500';
+                
+                rowContainer.innerHTML = `
+                    <div class="col-span-2 text-left pl-1 font-bold text-slate-600 whitespace-nowrap">${displayTanggal}</div>
+                    
+                    <div class="col-span-4 text-left px-1 keterangan-col select-none cursor-pointer" id="ket-${item.dataId}">
+                        <span class="break-words font-black text-slate-900 block leading-tight uppercase">${item.keterangan}</span>
+                        ${notaHtml}
+                    </div>
+                    
+                    <div class="col-span-2 flex justify-end font-black ${colorMasuk} whitespace-nowrap pr-1">
+                        ${formatRupiahMutasi(masuk, 'masuk')}
+                    </div>
+                    
+                    <div class="col-span-2 flex justify-end font-black ${colorKeluar} whitespace-nowrap pr-1">
+                        ${keluar > 0 ? `<span class="text-slate-400 font-normal mr-0.5 md:inline hidden">-</span>${formatRupiahMutasi(keluar, 'keluar')}` : formatRupiahMutasi(keluar, 'keluar')}
+                    </div>
+                    
+                    <div class="col-span-2 flex justify-end font-black text-blue-600 whitespace-nowrap pr-1 md:pr-4">
+                        ${formatRupiah(runningSaldo)}
+                    </div>
+                `;
+                container.appendChild(rowContainer);
+                
+                const ketElement = container.querySelector(`#ket-${item.dataId}`);
+                setupLongPress(ketElement, item.dataId);
+                
+                let isEndOfMonth = false;
+                if (index === rows.length - 1) {
+                    isEndOfMonth = true;
+                } else {
+                    const currentTxDate = parseDMYToDate(item.tanggal);
+                    const nextTxDate = parseDMYToDate(rows[index + 1].tanggal);
+                    if (currentTxDate.getMonth() !== nextTxDate.getMonth() || currentTxDate.getFullYear() !== nextTxDate.getFullYear()) {
+                        isEndOfMonth = true;
+                    }
+                }
+                
+                if (isEndOfMonth) {
+                    const rekapDiv = document.createElement("div");
+                    rekapDiv.className = "grid grid-cols-12 items-center py-1 md:py-2 px-2 my-1 bg-blue-600 text-white rounded-lg border border-blue-700 text-[1.8vw] md:text-xs font-black w-full";
+                    rekapDiv.innerHTML = `
+                        <div class="col-span-7 text-left pl-1 tracking-wider uppercase whitespace-nowrap overflow-hidden text-ellipsis">AKUMULASI SALDO BULAN ${getNamaBulan(item.tanggal)}</div>
+                        <div class="col-span-5 text-right pr-1 md:pr-10 text-[3.2vw] md:text-sm font-black whitespace-nowrap tracking-normal">Rp ${new Intl.NumberFormat('id-ID').format(runningSaldo)}</div>
+                    `;
+                    container.appendChild(rekapDiv);
+                }
+            });
+            
+            document.getElementById("total-saldo").innerText = formatRupiah(runningSaldo);
+            document.getElementById("total-pemasukan").innerText = formatRupiah(totalMasuk);
+            document.getElementById("total-pengeluaran").innerText = formatRupiah(totalKeluar);
+        }
+
         async function fetchLiveKasData() {
             const statusBadge = document.getElementById("loading-status");
+            if(!statusBadge) return;
             statusBadge.innerText = "Sinkronisasi...";
-            statusBadge.className = "text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full animate-pulse border border-amber-200";
+            statusBadge.className = "text-[2vw] md:text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full animate-pulse border border-amber-200";
             
             if (!WEB_APP_URL || WEB_APP_URL.includes("ISI_DENGAN_URL")) {
                 renderData(currentDatabase);
-                document.getElementById("total-saldo").innerText = formatRupiah(0);
-                document.getElementById("total-pemasukan").innerText = formatRupiah(0);
-                document.getElementById("total-pengeluaran").innerText = formatRupiah(0);
                 statusBadge.innerText = "Lokal Terproteksi";
-                statusBadge.className = "text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200";
+                statusBadge.className = "text-[2vw] md:text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200";
                 return;
             }
             try {
                 const antiCacheUrl = `${WEB_APP_URL}?_cb=${new Date().getTime()}`;
                 const response = await fetch(antiCacheUrl);
                 const data = await response.json();
-                if(data && data.length > 0) {
-                    currentDatabase = data;
-                } else {
-                    currentDatabase = [];
-                }
+                currentDatabase = (data && data.length > 0) ? data : [];
                 saveToLocalStorage();
                 renderData(currentDatabase);
                 statusBadge.innerText = "Terupdate";
-                statusBadge.className = "text-[10px] text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200";
+                statusBadge.className = "text-[2vw] md:text-xs text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200";
             } catch (error) {
-                console.error("Gagal sinkronisasi cloud, memuat cadangan lokal.");
                 renderData(currentDatabase);
                 statusBadge.innerText = "Offline (Lokal)";
-                statusBadge.className = "text-[10px] text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200";
+                statusBadge.className = "text-[2vw] md:text-xs text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200";
             }
         }
 
         async function handleFormSubmit(e) {
             e.preventDefault();
+            const formId = document.getElementById("form-id").value;
+            const isEdit = formId !== "";
+            
             const payload = {
-                action: "CREATE",
-                rowIndex: null,
-                tanggal: document.getElementById("form-tanggal").value,
-                keterangan: document.getElementById("form-keterangan").value.toUpperCase(),
+                pin: SECURITY_PIN, 
+                action: isEdit ? "UPDATE" : "CREATE",
+                tanggal: document.getElementById("form-tanggal").value, 
+                keterangan: document.getElementById("form-keterangan").value.toString().trim().toUpperCase(),
                 masuk: parseInt(document.getElementById("form-masuk").value) || 0,
                 keluar: parseInt(document.getElementById("form-keluar").value) || 0,
-                nota: document.getElementById("form-nota").value
+                nota: document.getElementById("form-nota").value.toString().trim()
             };
-            closeModal();
-            const statusBadge = document.getElementById("loading-status");
-            statusBadge.innerText = "Menyimpan...";
             
-            currentDatabase.push({
-                tanggal: payload.tanggal,
-                keterangan: payload.keterangan,
-                masuk: payload.masuk,
-                keluar: payload.keluar,
-                nota: payload.nota
-            });
-            saveToLocalStorage();
-            renderData(currentDatabase);
+            if (isEdit) {
+                const oldData = currentDatabase.find(x => x.dataId === formId);
+                if(oldData) {
+                    payload.oldTanggal = oldData.tanggal; 
+                    payload.oldKeterangan = oldData.keterangan.toString().trim().toUpperCase();
+                }
+            }
+            
+            closeModal();
+            document.getElementById("loading-status").innerText = "Menyimpan...";
             
             try {
-                await fetch(WEB_APP_URL, {
-                    method: "POST",
+                await fetch(WEB_APP_URL, { 
+                    method: "POST", 
                     mode: "no-cors",
                     headers: { "Content-Type": "text/plain" },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(payload) 
                 });
                 setTimeout(fetchLiveKasData, 1200);
             } catch (error) {
@@ -754,29 +995,27 @@
             }
         }
 
-        async function executeDelete(index) {
-            const targetData = currentDatabase[index];
-            if (!confirm(`Hapus transaksi: "${targetData.keterangan}"?`)) return;
-            const statusBadge = document.getElementById("loading-status");
-            statusBadge.innerText = "Menghapus...";
+        async function executeDelete(dataId) {
+            const targetData = currentDatabase.find(x => x.dataId === dataId);
+            if (!targetData || !confirm(`Hapus transaksi: "${targetData.keterangan}"?`)) return;
             
+            document.getElementById("loading-status").innerText = "Menghapus...";
             const payload = {
+                pin: SECURITY_PIN, 
                 action: "DELETE",
-                tanggal: targetData.tanggal,
-                keterangan: targetData.keterangan,
+                tanggal: targetData.tanggal, 
+                keterangan: targetData.keterangan.toString().trim().toUpperCase(),
                 masuk: targetData.masuk,
                 keluar: targetData.keluar
             };
-            currentDatabase.splice(index, 1);
-            saveToLocalStorage();
-            renderData(currentDatabase);
+            activeSessionPin = ""; 
             
             try {
-                await fetch(WEB_APP_URL, {
-                    method: "POST",
+                await fetch(WEB_APP_URL, { 
+                    method: "POST", 
                     mode: "no-cors",
                     headers: { "Content-Type": "text/plain" },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(payload) 
                 });
                 setTimeout(fetchLiveKasData, 1200);
             } catch (error) {
@@ -784,10 +1023,7 @@
             }
         }
 
-        window.addEventListener("DOMContentLoaded", () => {
-            loadFromLocalStorage();
-            fetchLiveKasData();
-        });
+        window.addEventListener("DOMContentLoaded", () => { loadFromLocalStorage(); fetchLiveKasData(); });
     </script>
 </body>
 </html>
