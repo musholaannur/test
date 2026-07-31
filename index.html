@@ -6,7 +6,7 @@
     <title>RT 08 RW 04 - Laporan Kas Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Pustaka html2pdf untuk ekspor PDF A4 UHD -->
+    <!-- Pustaka html2pdf untuk Ekspor PDF Desktop Resolution -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         * {
@@ -76,16 +76,31 @@
         @keyframes snowflakes-fall { 0% { top: -10%; } 100% { top: 105%; } }
         @keyframes snowflakes-shake { 0%, 100% { transform: translateX(0) rotate(0deg); } 50% { transform: translateX(60px) rotate(180deg); } }
 
-        /* MENCEGAH PEMOTONGAN DATA / SALDO DI TENGAH HALAMAN A4 */
+        /* MENCEGAH PEMOTONGAN BARIS DATA DI TENGAH HALAMAN A4 */
         .page-break-inside-avoid {
             break-inside: avoid !important;
             page-break-inside: avoid !important;
         }
 
+        /* CLASS KHUSUS MODE DESKTOP SAAT EKSPOR PDF */
+        .pdf-desktop-mode {
+            width: 1200px !important;
+            max-width: 1200px !important;
+            padding: 20px !important;
+            background-color: #f4f7f5 !important;
+        }
+
+        .pdf-desktop-mode .hidden.md\:grid {
+            display: grid !important;
+        }
+        .pdf-desktop-mode .hidden.md\:flex {
+            display: flex !important;
+        }
+
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 10mm;
+                margin: 8mm;
             }
             body {
                 background-color: #ffffff !important;
@@ -112,8 +127,10 @@
 
     <div id="snow-container"></div>
 
+    <!-- REPORT CONTAINER ATAS SAMPAI BAWAH YANG DI-CAPTURE UTUH -->
     <div id="report-container" class="w-full max-w-6xl flex flex-col gap-4 relative z-10 bg-[#f4f7f5] p-2 rounded-2xl">
         
+        <!-- HEADER UTAMA -->
         <div class="bg-gradient-to-r from-[#0d4a2a] via-[#106b3c] to-[#1da25a] text-center py-5 md:py-6 rounded-[28px] shadow-md px-4 flex flex-col gap-1 justify-center items-center overflow-hidden border border-emerald-900/20 page-break-inside-avoid">
             <h1 class="text-[#00FF66] text-[3.8vw] md:text-[2.2vw] tracking-wider uppercase font-black block w-full text-center whitespace-nowrap px-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 LAPORAN KAS RT 08 RW 04, BAKALAN LOR
@@ -126,6 +143,7 @@
             </div>
         </div>
 
+        <!-- SALDO UTAMA -->
         <div class="bg-[#115e3b] text-white text-center py-7 md:py-10 rounded-3xl shadow-md relative overflow-hidden flex items-center justify-center px-4 md:px-10 page-break-inside-avoid">
             <div class="flex-1 flex flex-col items-center justify-center px-2">
                 <div class="flex items-center justify-center gap-2 mb-2" data-html2canvas-ignore="true">
@@ -139,6 +157,7 @@
             </div>
         </div>
 
+        <!-- RINGKASAN PEMASUKAN & PENGELUARAN -->
         <div class="grid grid-cols-2 gap-3 page-break-inside-avoid">
             <div class="bg-white border border-slate-200/80 p-3 md:p-4 rounded-2xl shadow-sm relative overflow-hidden">
                 <div class="absolute top-0 left-0 bottom-0 w-[4px] bg-[#10b981]"></div>
@@ -152,6 +171,7 @@
             </div>
         </div>
 
+        <!-- TOMBOL INPUT (DISEMBUNYIKAN SAAT PDF) -->
         <button data-html2canvas-ignore="true" onclick="requestAccess('add')" class="w-full bg-[#10b981] hover:bg-[#059669] text-white py-3.5 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-sm tracking-wide text-xs md:text-sm uppercase text-center break-words">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-100 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
@@ -159,6 +179,7 @@
             <span class="break-words">INPUT DATA BARU</span>
         </button>
 
+        <!-- TABEL LAPORAN MUTASI KAS -->
         <div class="bg-white border border-slate-200 rounded-2xl p-3 md:p-6 shadow-sm overflow-hidden">
             <div class="flex justify-between items-center mb-4 w-full gap-2">
                 <h2 class="text-emerald-800 text-xs md:text-base tracking-wide uppercase border-b-2 border-[#115e3b] pb-0.5 font-black break-words">LAPORAN MUTASI KAS RT 08</h2>
@@ -177,7 +198,7 @@
             <div id="mutasi-list" class="flex flex-col gap-2 md:gap-1 text-xs md:text-sm w-full"></div>
         </div>
 
-        <!-- FOOTER: MBS ID BISA DI-KLIK UNTUK MEMBUKA POPUP DOWNLOAD PDF -->
+        <!-- FOOTER DENGAN POPUP DOWNLOAD PDF TERSEMBUNYI -->
         <div class="text-center py-2 flex flex-col items-center justify-center page-break-inside-avoid">
             <button onclick="openPdfModal()" class="text-[9px] md:text-xs tracking-widest text-slate-400 hover:text-emerald-700 active:scale-95 transition-all duration-200 uppercase break-words cursor-pointer select-none font-black flex items-center justify-center gap-1 group py-1 px-3 rounded-lg hover:bg-emerald-50/50">
                 <span>POWERED BY : MBS ID</span>
@@ -188,7 +209,7 @@
         </div>
     </div>
 
-    <!-- POP-UP MODAL TERSEMBUNYI UNTUK DOWNLOAD PDF -->
+    <!-- MODAL POPUP DOWNLOAD PDF DESKTOP MODE -->
     <div id="pdf-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn" data-html2canvas-ignore="true">
         <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xs p-5 shadow-2xl relative text-slate-800 text-center">
             <div class="w-12 h-12 rounded-full bg-emerald-100 text-[#115e3b] flex items-center justify-center mx-auto mb-3">
@@ -197,21 +218,21 @@
                 </svg>
             </div>
             <h3 class="text-[#115e3b] text-sm uppercase mb-1 font-black break-words">Unduh Laporan PDF</h3>
-            <p class="text-[10px] text-slate-500 mb-5 uppercase tracking-wide break-words leading-relaxed font-bold">Format A4 High-Resolution dengan Pemotongan Halaman Otomatis Rapi</p>
+            <p class="text-[10px] text-slate-500 mb-5 uppercase tracking-wide break-words leading-relaxed font-bold">Laporan Utuh Dari Atas Sampai Bawah (Tampilan Desktop A4 Resolusi Tinggi)</p>
             
             <div class="flex flex-col gap-2">
                 <button id="download-pdf-btn" onclick="exportToPDF()" class="w-full bg-gradient-to-r from-[#115e3b] to-[#106b3c] hover:from-[#0b3f27] hover:to-[#115e3b] text-white py-3 rounded-xl text-xs uppercase tracking-wider font-black shadow-md transition duration-200 flex items-center justify-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#00FF66]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    <span>DOWNLOAD PDF SEKARANG</span>
+                    <span>DOWNLOAD FULL PDF (DESKTOP)</span>
                 </button>
                 <button type="button" onclick="closePdfModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 py-2.5 rounded-xl text-xs uppercase tracking-wider font-black transition">Batal</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Input Transaction -->
+    <!-- MODAL INPUT TRANSAKSI -->
     <div id="transaction-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50" data-html2canvas-ignore="true">
         <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-sm p-5 shadow-xl relative text-slate-800">
             <h3 id="modal-title" class="text-[#115e3b] text-sm uppercase mb-4 break-words">Input Data Kas</h3>
@@ -249,7 +270,7 @@
         </div>
     </div>
 
-    <!-- Modal PIN -->
+    <!-- MODAL PIN -->
     <div id="pin-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn" data-html2canvas-ignore="true">
         <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-xs p-5 shadow-2xl relative text-slate-800 text-center">
             <div class="w-12 h-12 rounded-full bg-emerald-50 text-[#115e3b] flex items-center justify-center mx-auto mb-3">
@@ -340,7 +361,6 @@
             }
         }
 
-        /* FUNGSI CONTROL MODAL PDF TERSEMBUNYI */
         function openPdfModal() {
             document.getElementById("pdf-modal").classList.remove("hidden");
         }
@@ -497,40 +517,46 @@
             document.getElementById("total-pengeluaran").innerText = formatRupiah(totalKeluar);
         }
 
-        /* FUNGSI EKSPOR PDF ULTRA HIGH DEFINITION (A4 AUTOMATIC PAGE-BREAK) */
+        /* FUNGSI UTAMA EXPORT FULL PAGE PDF DESKTOP MODE RESOLUSI TINGGI UNTUK HP DAN LAPTOP */
         function exportToPDF() {
             const btn = document.getElementById("download-pdf-btn");
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<span class="animate-pulse">MEMPROSES PDF UHD...</span>`;
+            btn.innerHTML = `<span class="animate-pulse">MEMPROSES PDF DESKTOP...</span>`;
             btn.disabled = true;
 
             const element = document.getElementById('report-container');
             const todayStr = new Date().toISOString().split('T')[0];
-            
+
+            // Paksa elemen beralih ke Mode Dekstop Virtual sementara waktu saat penangkapan layar
+            element.classList.add("pdf-desktop-mode");
+
             const opt = {
                 margin:       [8, 8, 8, 8],
                 filename:     `Laporan_Kas_RT08_${todayStr}.pdf`,
                 image:        { type: 'jpeg', quality: 1.0 },
                 html2canvas:  { 
-                    scale: 3,             // Skala 3x (High DPI Retina Quality) agar gambar tajam dan tidak pecah saat diunduh
+                    scale: 3,             // Skala 3x (High DPI Retina Display Quality, Teks Sangat Tajam)
                     useCORS: true, 
                     logging: false,
                     letterRendering: true,
-                    windowWidth: 1200     // Memaksa mode desktop agar tampilan tabel luas & rapi saat direkam
+                    windowWidth: 1200     // Memaksa Mode Desktop 1200px agar tabel utuh dari atas sampai bawah
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { 
-                    mode: ['avoid-all', 'css', 'legacy'], // Menjaga pemotongan agar tidak memotong baris data atau saldo akhir di tengah halaman
+                    mode: ['avoid-all', 'css', 'legacy'], // Pemotongan halaman pintar persis di bawah baris data/saldo
                     avoid: '.page-break-inside-avoid'
                 }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
+                // Kembalikan ke Mode Tampilan Normal Pengguna
+                element.classList.remove("pdf-desktop-mode");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 closePdfModal();
             }).catch(err => {
                 console.error("Gagal export PDF:", err);
+                element.classList.remove("pdf-desktop-mode");
                 alert("Gagal mengunduh PDF. Silakan coba lagi.");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
