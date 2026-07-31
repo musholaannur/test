@@ -223,16 +223,17 @@
             #mutasi-list .bg-blue-600 div:last-child { font-size: 18px !important; }
         }
 
-        .pdf-render-box {
-            width: 790px !important;
-            box-sizing: border-box !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            background-color: #ffffff !important;
+        /* STYLES KHUSUS PRINT & PDF */
+        #pdf-export-area {
+            display: none;
+            width: 750px;
+            background-color: #ffffff;
+            color: #000000;
+            padding: 20px;
         }
-        .pdf-table { width: 100% !important; border-collapse: collapse !important; }
-        .pdf-table th { background-color: #f1f5f9 !important; color: #334155 !important; padding: 8px 6px !important; font-size: 11px !important; border: 1px solid #cbd5e1 !important; text-transform: uppercase !important; }
-        .pdf-table td { padding: 8px 6px !important; font-size: 11px !important; border: 1px solid #e2e8f0 !important; }
+        .pdf-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .pdf-table th { background-color: #f1f5f9; color: #1e293b; padding: 8px 6px; font-size: 11px; border: 1px solid #cbd5e1; text-transform: uppercase; }
+        .pdf-table td { padding: 8px 6px; font-size: 11px; border: 1px solid #e2e8f0; color: #1e293b; }
     </style>
 </head>
 <body class="min-h-screen py-4 px-3 md:py-6 md:px-8 flex flex-col items-center justify-start">
@@ -368,6 +369,55 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
             </button>
+        </div>
+    </div>
+
+    <!-- AREA KHUSUS CETAK PDF DIRECT DOM (AKAN DITAMPILKAN SEMENTARA SAAT EXPORT) -->
+    <div id="pdf-export-area">
+        <div style="background: linear-gradient(135deg, #0d4a2a, #106b3c, #1da25a); color: white; text-align: center; padding: 16px; border-radius: 16px; margin-bottom: 12px;">
+            <h1 style="color: #00FF66; margin: 0; font-size: 16pt; text-transform: uppercase; font-weight: 900;">MUSHOLA WAKAF AN-NUR</h1>
+            <p style="margin: 4px 0 0 0; font-size: 10pt; font-weight: bold;">LAPORAN INFAQ DIGITAL SYSTEM</p>
+            <div style="color: #00FF66; font-size: 8pt; font-weight: 900; margin-top: 4px;">musholaannur.vercel.app</div>
+        </div>
+
+        <div style="background-color: #115e3b; color: white; text-align: center; padding: 18px; border-radius: 16px; margin-bottom: 12px;">
+            <div style="font-size: 9pt; color: #a7f3d0; text-transform: uppercase;">SALDO INFAQ SAAT INI</div>
+            <div id="pdf-saldo-saat-ini" style="font-size: 30pt; font-weight: 900; color: white; margin-top: 2px;">Rp 0</div>
+        </div>
+
+        <table style="width: 100%; margin-bottom: 12px; border-collapse: collapse;">
+            <tr>
+                <td style="width: 49%; background: white; border: 1px solid #cbd5e1; border-left: 5px solid #10b981; border-radius: 10px; padding: 10px;">
+                    <div style="font-size: 8pt; color: #64748b; text-transform: uppercase;">Total Pemasukan</div>
+                    <div id="pdf-pemasukan" style="font-size: 14pt; font-weight: 900; color: #10b981;">Rp 0</div>
+                </td>
+                <td style="width: 2%;"></td>
+                <td style="width: 49%; background: white; border: 1px solid #cbd5e1; border-left: 5px solid #ef4444; border-radius: 10px; padding: 10px;">
+                    <div style="font-size: 8pt; color: #64748b; text-transform: uppercase;">Total Pengeluaran</div>
+                    <div id="pdf-pengeluaran" style="font-size: 14pt; font-weight: 900; color: #ef4444;">Rp 0</div>
+                </td>
+            </tr>
+        </table>
+
+        <div style="background: white; border: 1px solid #cbd5e1; border-radius: 12px; padding: 12px;">
+            <div style="color: #065f46; font-size: 11pt; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #115e3b; padding-bottom: 4px; margin-bottom: 10px;">LAPORAN MUTASI INFAQ</div>
+            <table class="pdf-table">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">Tanggal</th>
+                        <th style="width: 40%;">Keterangan</th>
+                        <th style="width: 15%;">Masuk</th>
+                        <th style="width: 15%;">Keluar</th>
+                        <th style="width: 15%;">Saldo</th>
+                    </tr>
+                </thead>
+                <tbody id="pdf-table-body">
+                </tbody>
+            </table>
+        </div>
+
+        <div style="text-align: center; margin-top: 15px; font-size: 8pt; color: #94a3b8; font-weight: 900; letter-spacing: 2px;">
+            POWERED BY : MBS ID
         </div>
     </div>
     <!-- MODAL POPUP DOWNLOAD PDF -->
@@ -576,7 +626,7 @@
         function openPdfModal() { document.getElementById("pdf-modal").classList.remove("hidden"); }
         function closePdfModal() { document.getElementById("pdf-modal").classList.add("hidden"); }
 
-        /* FUNGSI EKSPOR PDF FIX (BEBAS BLANK PUTIH) */
+        /* FUNGSI EKSPOR PDF BARU (100% BEBAS BLANK PUTIH) */
         function exportToPDF() {
             const btn = document.getElementById("download-pdf-btn");
             const originalText = btn.innerHTML;
@@ -584,6 +634,8 @@
             btn.disabled = true;
 
             const todayStr = new Date().toISOString().split('T')[0];
+            const exportArea = document.getElementById("pdf-export-area");
+            const tbody = document.getElementById("pdf-table-body");
 
             let runningSaldo = 0;
             let totalMasuk = 0;
@@ -639,67 +691,14 @@
                 `;
             }
 
-            // Container Render menggunakan position: fixed & z-index minus agar terbaca sempurna oleh html2canvas
-            const renderWrapper = document.createElement('div');
-            renderWrapper.style.position = 'fixed';
-            renderWrapper.style.top = '0';
-            renderWrapper.style.left = '0';
-            renderWrapper.style.zIndex = '-9999';
-            renderWrapper.style.width = '790px';
-            renderWrapper.style.backgroundColor = '#ffffff';
+            // Isi data ringkasan cetak
+            document.getElementById("pdf-saldo-saat-ini").innerText = formatRupiah(runningSaldo);
+            document.getElementById("pdf-pemasukan").innerText = formatRupiah(totalMasuk);
+            document.getElementById("pdf-pengeluaran").innerText = formatRupiah(totalKeluar);
+            tbody.innerHTML = tableRowsHtml;
 
-            renderWrapper.innerHTML = `
-                <div class="pdf-render-box" style="padding: 12px; background: #ffffff;">
-                    <div style="background: linear-gradient(135deg, #0d4a2a, #106b3c, #1da25a); color: white; text-align: center; padding: 16px; border-radius: 16px; margin-bottom: 12px;">
-                        <h1 style="color: #00FF66; margin: 0; font-size: 16pt; text-transform: uppercase; font-weight: 900;">MUSHOLA WAKAF AN-NUR</h1>
-                        <p style="margin: 4px 0 0 0; font-size: 10pt; font-weight: bold;">LAPORAN INFAQ DIGITAL SYSTEM</p>
-                        <div style="color: #00FF66; font-size: 8pt; font-weight: 900; margin-top: 4px;">musholaannur.vercel.app</div>
-                    </div>
-
-                    <div style="background-color: #115e3b; color: white; text-align: center; padding: 18px; border-radius: 16px; margin-bottom: 12px;">
-                        <div style="font-size: 9pt; color: #a7f3d0; text-transform: uppercase;">SALDO INFAQ SAAT INI</div>
-                        <div style="font-size: 30pt; font-weight: 900; color: white; margin-top: 2px;">${formatRupiah(runningSaldo)}</div>
-                    </div>
-
-                    <table style="width: 100%; margin-bottom: 12px; border-collapse: collapse;">
-                        <tr>
-                            <td style="width: 49%; background: white; border: 1px solid #cbd5e1; border-left: 5px solid #10b981; border-radius: 10px; padding: 10px;">
-                                <div style="font-size: 8pt; color: #64748b; text-transform: uppercase;">Total Pemasukan</div>
-                                <div style="font-size: 14pt; font-weight: 900; color: #10b981;">${formatRupiah(totalMasuk)}</div>
-                            </td>
-                            <td style="width: 2%;"></td>
-                            <td style="width: 49%; background: white; border: 1px solid #cbd5e1; border-left: 5px solid #ef4444; border-radius: 10px; padding: 10px;">
-                                <div style="font-size: 8pt; color: #64748b; text-transform: uppercase;">Total Pengeluaran</div>
-                                <div style="font-size: 14pt; font-weight: 900; color: #ef4444;">${formatRupiah(totalKeluar)}</div>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <div style="background: white; border: 1px solid #cbd5e1; border-radius: 12px; padding: 12px;">
-                        <div style="color: #065f46; font-size: 11pt; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #115e3b; padding-bottom: 4px; margin-bottom: 10px;">LAPORAN MUTASI INFAQ</div>
-                        <table class="pdf-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 15%;">Tanggal</th>
-                                    <th style="width: 40%;">Keterangan</th>
-                                    <th style="width: 15%;">Masuk</th>
-                                    <th style="width: 15%;">Keluar</th>
-                                    <th style="width: 15%;">Saldo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${tableRowsHtml}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 15px; font-size: 8pt; color: #94a3b8; font-weight: 900; letter-spacing: 2px;">
-                        POWERED BY : MBS ID
-                    </div>
-                </div>
-            `;
-
-            document.body.appendChild(renderWrapper);
+            // Tampilkan elemen ke DOM sementara agar tertangkap sempurna oleh canvas
+            exportArea.style.display = "block";
 
             const opt = {
                 margin:       [4, 4, 4, 4],
@@ -711,22 +710,20 @@
                     logging: false,
                     scrollX: 0,
                     scrollY: 0,
-                    windowWidth: 800
+                    windowWidth: 750
                 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            html2pdf().set(opt).from(renderWrapper).save().then(() => {
-                document.body.removeChild(renderWrapper);
+            html2pdf().set(opt).from(exportArea).save().then(() => {
+                exportArea.style.display = "none";
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 closePdfModal();
             }).catch(err => {
                 console.error("Gagal export PDF:", err);
-                if (document.body.contains(renderWrapper)) {
-                    document.body.removeChild(renderWrapper);
-                }
+                exportArea.style.display = "none";
                 alert("Gagal mengunduh PDF. Silakan coba lagi.");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
