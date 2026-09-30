@@ -225,7 +225,13 @@
             #mutasi-list .bg-blue-600 div:last-child { font-size: 18px !important; }
         }
 
-        /* STYLES KHUSUS AREA PDF */
+        /* STYLES KHUSUS AREA PDF & PRESISI WARNA NATIVE */
+        #pdf-export-area, #pdf-export-area * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+
         #pdf-export-area {
             display: none;
             width: 100%;
@@ -237,21 +243,30 @@
             margin: 0 auto;
         }
         .pdf-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 0px; }
-        .pdf-table th { background-color: #f8fafc; color: #475569; padding: 8px 6px; font-size: 10.5px; border-bottom: 2px solid #cbd5e1; text-transform: uppercase; }
-        .pdf-table td { padding: 8px 6px; font-size: 10px; border-bottom: 1px solid #e2e8f0; color: #0f172a; word-wrap: break-word; }
+        .pdf-table th { background-color: #f8fafc; color: #475569; padding: 8px 6px; font-size: 10.5px; border-bottom: 2px solid #cbd5e1; text-transform: uppercase; font-weight: 900; }
+        .pdf-table td { padding: 8px 6px; font-size: 10px; border-bottom: 1px solid #e2e8f0; color: #0f172a; word-wrap: break-word; font-weight: 900; }
         
         .pdf-keep-together {
             page-break-inside: avoid !important;
             break-inside: avoid !important;
         }
 
-        /* DUKUNGAN CETAK VEKTOR NATIVE (WINDOW.PRINT) */
+        /* DUKUNGAN CETAK VEKTOR NATIVE (WINDOW.PRINT) DENGAN WARNA PRESISI 100% */
         @media print {
+            html, body {
+                background-color: #f4f7f5 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
             body * {
                 visibility: hidden !important;
             }
             #pdf-export-area, #pdf-export-area * {
                 visibility: visible !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
             }
             #pdf-export-area {
                 display: block !important;
@@ -262,13 +277,14 @@
                 max-width: 100% !important;
                 padding: 0 !important;
                 margin: 0 !important;
+                background-color: #f4f7f5 !important;
             }
             #pdf-modal, #photo-modal, #transaction-modal, #pin-modal, #mobile-action-menu, #snow-container {
                 display: none !important;
             }
             @page {
                 size: A4 portrait;
-                margin: 8mm;
+                margin: 6mm;
             }
         }
     </style>
@@ -445,39 +461,39 @@
         </div>
     </div>
 
-    <!-- AREA KHUSUS CETAK PDF -->
+    <!-- AREA KHUSUS CETAK PDF - WARNA PERSIS DENGAN WEBSITE UTAMA -->
     <div id="pdf-export-area">
-        <div class="pdf-keep-together" style="background-color: #115e3b; color: white; text-align: center; padding: 18px 14px; border-radius: 18px; margin-bottom: 12px;">
-            <h1 style="color: #ffffff; margin: 0; font-size: 18pt; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">MUSHOLA WAKAF AN-NUR</h1>
-            <p style="color: #00FF66; margin: 4px 0 0 0; font-size: 9pt; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;">LAPORAN INFAQ DIGITAL SYSTEM</p>
-            <div style="color: #ffffff; font-size: 8pt; font-weight: 500; margin-top: 4px; opacity: 0.9;">Untuk Transparansi Keuangan Infaq Mushola Wakaf An-Nur | musholaannur.vercel.app</div>
+        <div class="pdf-keep-together" style="background-color: #115e3b !important; color: #ffffff !important; text-align: center; padding: 18px 14px; border-radius: 18px; margin-bottom: 12px; -webkit-print-color-adjust: exact !important;">
+            <h1 style="color: #ffffff !important; margin: 0; font-size: 18pt; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">MUSHOLA WAKAF AN-NUR</h1>
+            <p style="color: #00FF66 !important; margin: 4px 0 0 0; font-size: 9pt; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;">LAPORAN INFAQ DIGITAL SYSTEM</p>
+            <div style="color: #ffffff !important; font-size: 8pt; font-weight: 500; margin-top: 4px; opacity: 0.9;">Untuk Transparansi Keuangan Infaq Mushola Wakaf An-Nur | musholaannur.vercel.app</div>
         </div>
 
-        <div class="pdf-keep-together" style="background-color: #2563eb; color: white; text-align: center; padding: 20px 14px; border-radius: 18px; margin-bottom: 12px;">
-            <div style="font-size: 8pt; color: #00FF66; text-transform: uppercase; font-weight: 900; letter-spacing: 2px; margin-bottom: 2px;">● SYSTEM ONLINE</div>
-            <div style="font-size: 9pt; color: #dbeafe; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">SALDO INFAQ SAAT INI</div>
-            <div id="pdf-saldo-saat-ini" style="font-size: 30pt; font-weight: 900; color: #ffffff; margin-top: 2px; letter-spacing: -1px;">Rp 0</div>
+        <div class="pdf-keep-together" style="background-color: #2563eb !important; color: #ffffff !important; text-align: center; padding: 20px 14px; border-radius: 18px; margin-bottom: 12px; -webkit-print-color-adjust: exact !important;">
+            <div style="font-size: 8pt; color: #00FF66 !important; text-transform: uppercase; font-weight: 900; letter-spacing: 2px; margin-bottom: 2px;">● SYSTEM ONLINE</div>
+            <div style="font-size: 9pt; color: #dbeafe !important; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">SALDO INFAQ SAAT INI</div>
+            <div id="pdf-saldo-saat-ini" style="font-size: 30pt; font-weight: 900; color: #ffffff !important; margin-top: 2px; letter-spacing: -1px;">Rp 0</div>
         </div>
 
         <table class="pdf-keep-together" style="width: 100%; margin-bottom: 12px; border-collapse: separate; border-spacing: 10px 0; margin-left: -10px; width: calc(100% + 20px);">
             <tr>
-                <td style="width: 50%; background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #10b981; border-radius: 14px; padding: 10px 12px;">
-                    <div style="font-size: 8pt; color: #64748b; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">Total Pemasukan</div>
-                    <div id="pdf-pemasukan" style="font-size: 15pt; font-weight: 900; color: #10b981; margin-top: 2px;">Rp 0</div>
+                <td style="width: 50%; background: #ffffff !important; border: 1px solid #e2e8f0; border-left: 5px solid #10b981 !important; border-radius: 14px; padding: 10px 12px; -webkit-print-color-adjust: exact !important;">
+                    <div style="font-size: 8pt; color: #64748b !important; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">Total Pemasukan</div>
+                    <div id="pdf-pemasukan" style="font-size: 15pt; font-weight: 900; color: #10b981 !important; margin-top: 2px;">Rp 0</div>
                 </td>
-                <td style="width: 50%; background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #ef4444; border-radius: 14px; padding: 10px 12px;">
-                    <div style="font-size: 8pt; color: #64748b; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">Total Pengeluaran</div>
-                    <div id="pdf-pengeluaran" style="font-size: 15pt; font-weight: 900; color: #ef4444; margin-top: 2px;">Rp 0</div>
+                <td style="width: 50%; background: #ffffff !important; border: 1px solid #e2e8f0; border-left: 5px solid #ef4444 !important; border-radius: 14px; padding: 10px 12px; -webkit-print-color-adjust: exact !important;">
+                    <div style="font-size: 8pt; color: #64748b !important; text-transform: uppercase; font-weight: 900; letter-spacing: 1px;">Total Pengeluaran</div>
+                    <div id="pdf-pengeluaran" style="font-size: 15pt; font-weight: 900; color: #ef4444 !important; margin-top: 2px;">Rp 0</div>
                 </td>
             </tr>
         </table>
 
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 12px;">
-            <div style="color: #065f46; font-size: 10pt; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #115e3b; padding-bottom: 6px; margin-bottom: 8px; letter-spacing: 1px;">LAPORAN MUTASI INFAQ</div>
+        <div style="background: #ffffff !important; border: 1px solid #e2e8f0; border-radius: 16px; padding: 12px; -webkit-print-color-adjust: exact !important;">
+            <div style="color: #115e3b !important; font-size: 10pt; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #115e3b !important; padding-bottom: 6px; margin-bottom: 8px; letter-spacing: 1px;">LAPORAN MUTASI INFAQ</div>
             <div id="pdf-blocks-container"></div>
         </div>
 
-        <div style="text-align: center; margin-top: 14px; font-size: 8pt; color: #94a3b8; font-weight: 900; letter-spacing: 2px;" class="pdf-keep-together">
+        <div style="text-align: center; margin-top: 14px; font-size: 8pt; color: #94a3b8 !important; font-weight: 900; letter-spacing: 2px;" class="pdf-keep-together">
             POWERED BY : MBS ID
         </div>
     </div>
@@ -497,7 +513,7 @@
                     <p class="font-bold uppercase flex items-center gap-1 mb-0.5">
                         <i class="fa-solid fa-circle-check text-emerald-600"></i> OPSI HASIL TERBAIK & VEKTOR TAJAM:
                     </p>
-                    <p class="text-slate-600 font-semibold">Gunakan **Cetak Vektor Native** untuk hasil PDF 100% tajam, tulisan bisa di-copy, dan tidak berbayang.</p>
+                    <p class="text-slate-600 font-semibold">Gunakan **Cetak Vektor Native** untuk hasil PDF 100% tajam, tulisan bisa di-copy, dan warna sesuai website.</p>
                 </div>
                 <div class="pt-1 flex flex-col gap-2">
                     <button onclick="printNativeVector()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs rounded-lg shadow-md transition uppercase tracking-wider flex items-center justify-center gap-2">
@@ -662,7 +678,7 @@
 
         function formatRupiahMutasi(angka, type) {
             if (angka === 0 || !angka) {
-                return `<span class="hidden md:inline text-rose-500 font-bold">-</span><span class="inline md:hidden"></span>`;
+                return `<span class="hidden md:inline font-bold" style="color: #ef4444 !important;">-</span><span class="inline md:hidden"></span>`;
             }
             return "Rp " + new Intl.NumberFormat('id-ID').format(angka);
         }
@@ -773,7 +789,7 @@
             if (e.key === 'Escape') closePhotoModal();
         });
 
-        /* FUNGSI UNTUK MENYUSUN DATA DOKUMEN LAPORAN PDF */
+        /* FUNGSI UNTUK MENYUSUN DATA DOKUMEN LAPORAN PDF DENGAN WARNA DETAIL TEPAT */
         function preparePdfExportArea() {
             const exportArea = document.getElementById("pdf-export-area");
             const blocksContainer = document.getElementById("pdf-blocks-container");
@@ -817,7 +833,7 @@
                 blocksHtml = `
                     <table class="pdf-table">
                         <tr>
-                            <td style="text-align: center; color: #64748b; padding: 20px;">Belum ada data transaksi infaq.</td>
+                            <td style="text-align: center; color: #64748b !important; padding: 20px;">Belum ada data transaksi infaq.</td>
                         </tr>
                     </table>
                 `;
@@ -826,11 +842,11 @@
                     <table class="pdf-table">
                         <thead>
                             <tr>
-                                <th style="width: 20%; text-align: left; padding-left: 12px;">Tanggal</th>
-                                <th style="width: 35%; text-align: left;">Keterangan</th>
-                                <th style="width: 15%; text-align: right;">Masuk</th>
-                                <th style="width: 15%; text-align: right;">Keluar</th>
-                                <th style="width: 15%; text-align: right; padding-right: 10px;">Saldo</th>
+                                <th style="width: 20%; text-align: left; padding-left: 12px; color: #475569 !important;">Tanggal</th>
+                                <th style="width: 35%; text-align: left; color: #475569 !important;">Keterangan</th>
+                                <th style="width: 15%; text-align: right; color: #475569 !important;">Masuk</th>
+                                <th style="width: 15%; text-align: right; color: #475569 !important;">Keluar</th>
+                                <th style="width: 15%; text-align: right; padding-right: 10px; color: #475569 !important;">Saldo</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -842,23 +858,23 @@
                     group.items.forEach((item, idx) => {
                         const masuk = parseInt(item.masuk) || 0;
                         const keluar = parseInt(item.keluar) || 0;
-                        const bgRow = idx % 2 === 0 ? 'background-color: #ffffff;' : 'background-color: #f8fafc;';
+                        const bgRow = idx % 2 === 0 ? 'background-color: #ffffff !important;' : 'background-color: #f8fafc !important;';
 
                         blocksHtml += `
-                            <tr style="${bgRow}" class="pdf-keep-together">
-                                <td style="width: 20%; text-align: left; font-weight: 700; color: #475569; white-space: nowrap; padding-left: 12px;">${formatToDMYString(item.tanggal)}</td>
-                                <td style="width: 35%; text-align: left; font-weight: 900; color: #0f172a; text-transform: uppercase;">${item.keterangan}</td>
-                                <td style="width: 15%; text-align: right; font-weight: 900; color: #10b981;">${masuk > 0 ? formatRupiah(masuk) : "-"}</td>
-                                <td style="width: 15%; text-align: right; font-weight: 900; color: #ef4444;">${keluar > 0 ? "-" + formatRupiah(keluar) : "-"}</td>
-                                <td style="width: 15%; text-align: right; font-weight: 900; color: #2563eb; padding-right: 10px;">${formatRupiah(item.currentSaldo)}</td>
+                            <tr style="${bgRow} -webkit-print-color-adjust: exact !important;" class="pdf-keep-together">
+                                <td style="width: 20%; text-align: left; font-weight: 700; color: #475569 !important; white-space: nowrap; padding-left: 12px;">${formatToDMYString(item.tanggal)}</td>
+                                <td style="width: 35%; text-align: left; font-weight: 900; color: #0f172a !important; text-transform: uppercase;">${item.keterangan}</td>
+                                <td style="width: 15%; text-align: right; font-weight: 900; color: #10b981 !important;">${masuk > 0 ? formatRupiah(masuk) : "-"}</td>
+                                <td style="width: 15%; text-align: right; font-weight: 900; color: #ef4444 !important;">${keluar > 0 ? "-" + formatRupiah(keluar) : "-"}</td>
+                                <td style="width: 15%; text-align: right; font-weight: 900; color: #2563eb !important; padding-right: 10px;">${formatRupiah(item.currentSaldo)}</td>
                             </tr>
                         `;
                     });
 
                     blocksHtml += `
-                        <tr style="background-color: #2563eb; color: white; font-weight: 900;" class="pdf-keep-together">
-                            <td colspan="4" style="text-align: left; padding: 7px 12px; font-size: 10px; letter-spacing: 1px; color: #ffffff;">AKUMULASI SALDO BULAN ${group.monthKey}</td>
-                            <td style="text-align: right; padding: 7px 10px; font-size: 10.5px; color: #ffffff;">${formatRupiah(lastGroupSaldo)}</td>
+                        <tr style="background-color: #2563eb !important; color: #ffffff !important; font-weight: 900; -webkit-print-color-adjust: exact !important;" class="pdf-keep-together">
+                            <td colspan="4" style="text-align: left; padding: 7px 12px; font-size: 10px; letter-spacing: 1px; color: #ffffff !important;">AKUMULASI SALDO BULAN ${group.monthKey}</td>
+                            <td style="text-align: right; padding: 7px 10px; font-size: 10.5px; color: #ffffff !important;">${formatRupiah(lastGroupSaldo)}</td>
                         </tr>
                     `;
                 });
@@ -875,7 +891,7 @@
             blocksContainer.innerHTML = blocksHtml;
         }
 
-        /* 1. FUNGSI CETAK / SIMPAN PDF VEKTOR NATIVE (100% TAJAM VIA WINDOW.PRINT) */
+        /* 1. FUNGSI CETAK / SIMPAN PDF VEKTOR NATIVE (100% TAJAM & WARNA PERSIS WEBSITE) */
         function printNativeVector() {
             closePdfModal();
             preparePdfExportArea();
